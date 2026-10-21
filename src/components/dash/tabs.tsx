@@ -54,7 +54,6 @@ export function CandidatosTab() {
               <YAxis {...axisProps} />
               <Tooltip {...tooltipProps} />
               <Area type="monotone" dataKey="cadastros" name="Cadastros" stroke={C.c1} strokeWidth={2} fill="url(#gCad)" />
-              <Line type="monotone" dataKey="contratados" name="Contratados" stroke={C.c3} strokeWidth={2} />
               <Area type="monotone" dataKey="contratados" name="Contratados" stroke={C.c3} strokeWidth={2} fill="transparent" />
             </AreaChart>
           </ResponsiveContainer>
