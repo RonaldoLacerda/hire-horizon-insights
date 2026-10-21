@@ -7,7 +7,7 @@ export const C = {
   c4: "var(--chart-4)", c5: "var(--chart-5)", c6: "var(--chart-6)",
   grid: "var(--border)", axis: "var(--muted-foreground)",
 };
-export const PALETTE = [C.c1, C.c2, C.c3, C.c4, C.c5, C.c6];
+export const PALETTE: string[] = [C.c1, C.c2, C.c3, C.c4, C.c5, C.c6];
 
 export const axisProps = {
   stroke: C.axis, fontSize: 11, tickLine: false, axisLine: false,
