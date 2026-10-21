@@ -91,7 +91,7 @@ export function InsightList({ items }: { items: string[] }) {
   );
 }
 
-export function Legend({ items }: { items: { name: string; value: number | string; color?: string }[] }) {
+export function Legend({ items }: { items: { name: string; value: number | string; color?: string | undefined }[] }) {
   return (
     <ul className="space-y-2 text-sm">
       {items.map((i) => (
