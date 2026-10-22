@@ -145,7 +145,22 @@ export function CandidatosTab() {
         </ChartCard>
       </div>
 
+      <ChartCard title="Candidaturas por dia — últimos 7 dias" subtitle="Picos destacados indicam melhores dias para divulgar vagas">
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart data={porDia} margin={{ left: -20, top: 18 }}>
+            <XAxis dataKey="d" {...axisProps} />
+            <YAxis hide />
+            <Tooltip {...tooltipProps} />
+            <Bar dataKey="v" name="Candidaturas" radius={[6, 6, 0, 0]} barSize={34}>
+              {porDia.map((p, i) => <Cell key={i} fill={p.v >= picoDia * 0.85 ? C.c1 : "var(--muted)"} />)}
+              <LabelList dataKey="v" position="top" fill="var(--foreground)" fontSize={12} fontWeight={600} />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartCard>
+
       <InsightList items={[
+        "Quinta e sexta concentram 41% das candidaturas da semana — publique vagas novas no início da semana.",
         "Cadastros cresceram 13,5% no mês, puxados por Site de vagas e LinkedIn.",
         "32% da base ainda tem currículo incompleto — considere campanha de atualização.",
         "Faixa 19–25 anos concentra 58% dos candidatos: alto potencial para programas de estágio.",
@@ -173,8 +188,8 @@ export function VagasTab() {
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Vagas cadastradas" value="255" delta={8.4} icon={Briefcase} />
         <KpiCard label="Vagas abertas" value="214" delta={4.1} icon={BriefcaseBusiness} tone="info" />
+        <KpiCard label="Taxa de preenchimento" value="78%" delta={4} icon={Target} tone="success" hint="vagas preenchidas no prazo" />
         <KpiCard label="Tempo médio p/ fechar" value="21 dias" delta={-12} icon={Clock} tone="success" hint="mais rápido que set." />
         <KpiCard label="Vagas paradas +30 dias" value="23" delta={9} icon={XCircle} tone="danger" hint="exigem atenção" />
       </div>
