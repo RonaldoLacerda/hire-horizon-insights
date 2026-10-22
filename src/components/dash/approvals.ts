@@ -9,9 +9,8 @@ export type PendingApproval = {
 };
 
 export const pendingApprovals: PendingApproval[] = [
-  { id: "v-1", kind: "vaga", name: "Auxiliar Administrativo", org: "Banco Horizonte", sentAt: "21/10/2026" },
-  { id: "v-2", kind: "vaga", name: "Estoquista", org: "Varejo Bom Preço", sentAt: "20/10/2026" },
-  { id: "e-1", kind: "empresa", name: "Clínica Vida Plena", org: "Saúde", sentAt: "19/10/2026" },
+
+
 ];
 
 export const pendingCounts = {
