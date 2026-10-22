@@ -6,9 +6,53 @@ import {
   Users, UserCheck, GraduationCap, MapPin, Briefcase, BriefcaseBusiness, Clock, XCircle,
   Building2, Handshake, Star, Timer, Target, Award, CalendarCheck,
 } from "lucide-react";
-import { C, PALETTE, axisProps, tooltipProps, KpiCard, ChartCard, InsightList, Legend, RankTable } from "./primitives";
+import { C, PALETTE, axisProps, tooltipProps, KpiCard, ChartCard, InsightList, Legend, RankTable, StatusBadge } from "./primitives";
 
 const months = ["Mai", "Jun", "Jul", "Ago", "Set", "Out"];
+
+const porDia = [
+  { d: "Seg", v: 24 }, { d: "Ter", v: 31 }, { d: "Qua", v: 29 }, { d: "Qui", v: 38 },
+  { d: "Sex", v: 42 }, { d: "Sáb", v: 18 }, { d: "Dom", v: 12 },
+];
+const picoDia = Math.max(...porDia.map((p) => p.v));
+
+const vagasRecentes = [
+  { vaga: "Agente Comunitário de Saúde", area: "Saúde", cand: 31, status: "Ativa", data: "20/10/2026" },
+  { vaga: "Auxiliar de Serviços Gerais", area: "Serviços Gerais", cand: 19, status: "Ativa", data: "18/10/2026" },
+  { vaga: "Recepcionista — UAI Jardim Canadá", area: "Administrativo", cand: 44, status: "Em seleção", data: "15/10/2026" },
+  { vaga: "Vendedor(a) — Loja de Materiais", area: "Comercial", cand: 27, status: "Stand by", data: "11/10/2026" },
+  { vaga: "Eletricista de Manutenção Predial", area: "Manutenção", cand: 12, status: "Ativa", data: "08/10/2026" },
+];
+
+function VagasRecentes() {
+  return (
+    <ChartCard title="Vagas recentes" subtitle="Últimas publicadas" action={<button className="text-xs font-semibold text-brand hover:underline">Ver todas</button>}>
+      <div className="-mx-5 overflow-x-auto">
+        <table className="w-full min-w-[640px] text-sm">
+          <thead>
+            <tr className="border-b text-left text-overline text-muted-foreground">
+              <th className="px-5 py-2 font-semibold">Vaga</th><th className="py-2 font-semibold">Área</th>
+              <th className="py-2 font-semibold">Candidaturas</th><th className="py-2 font-semibold">Status</th>
+              <th className="py-2 font-semibold">Publicada em</th><th className="px-5 py-2" />
+            </tr>
+          </thead>
+          <tbody>
+            {vagasRecentes.map((v) => (
+              <tr key={v.vaga} className="border-b last:border-0 hover:bg-muted/50">
+                <td className="px-5 py-3 font-medium">{v.vaga}</td>
+                <td className="py-3 text-muted-foreground">{v.area}</td>
+                <td className="py-3 tabular-nums">{v.cand}</td>
+                <td className="py-3"><StatusBadge status={v.status} /></td>
+                <td className="py-3 tabular-nums text-muted-foreground">{v.data}</td>
+                <td className="px-5 py-3 text-right"><button className="text-xs font-semibold text-brand hover:underline">Alterar status</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </ChartCard>
+  );
+}
 
 /* ---------------- CANDIDATOS ---------------- */
 const cadastros = months.map((m, i) => ({ m, cadastros: [92, 110, 134, 121, 148, 168][i], contratados: [12, 15, 18, 14, 21, 25][i] }));
@@ -101,7 +145,22 @@ export function CandidatosTab() {
         </ChartCard>
       </div>
 
+      <ChartCard title="Candidaturas por dia — últimos 7 dias" subtitle="Picos destacados indicam melhores dias para divulgar vagas">
+        <ResponsiveContainer width="100%" height={220}>
+          <BarChart data={porDia} margin={{ left: -20, top: 18 }}>
+            <XAxis dataKey="d" {...axisProps} />
+            <YAxis hide />
+            <Tooltip {...tooltipProps} />
+            <Bar dataKey="v" name="Candidaturas" radius={[6, 6, 0, 0]} barSize={34}>
+              {porDia.map((p, i) => <Cell key={i} fill={p.v >= picoDia * 0.85 ? C.c1 : "var(--muted)"} />)}
+              <LabelList dataKey="v" position="top" fill="var(--foreground)" fontSize={12} fontWeight={600} />
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </ChartCard>
+
       <InsightList items={[
+        "Quinta e sexta concentram 41% das candidaturas da semana — publique vagas novas no início da semana.",
         "Cadastros cresceram 13,5% no mês, puxados por Site de vagas e LinkedIn.",
         "32% da base ainda tem currículo incompleto — considere campanha de atualização.",
         "Faixa 19–25 anos concentra 58% dos candidatos: alto potencial para programas de estágio.",
@@ -129,8 +188,8 @@ export function VagasTab() {
   return (
     <div className="space-y-5">
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Vagas cadastradas" value="255" delta={8.4} icon={Briefcase} />
         <KpiCard label="Vagas abertas" value="214" delta={4.1} icon={BriefcaseBusiness} tone="info" />
+        <KpiCard label="Taxa de preenchimento" value="78%" delta={4} icon={Target} tone="success" hint="vagas preenchidas no prazo" />
         <KpiCard label="Tempo médio p/ fechar" value="21 dias" delta={-12} icon={Clock} tone="success" hint="mais rápido que set." />
         <KpiCard label="Vagas paradas +30 dias" value="23" delta={9} icon={XCircle} tone="danger" hint="exigem atenção" />
       </div>
@@ -201,6 +260,8 @@ export function VagasTab() {
           </ResponsiveContainer>
         </ChartCard>
       </div>
+
+      <VagasRecentes />
 
       <InsightList items={[
         "Vagas de TI levam 34 dias para fechar — 62% acima da média geral.",
