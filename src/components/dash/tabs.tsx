@@ -7,6 +7,7 @@ import {
   Building2, Handshake, Accessibility, Send, Hourglass, FileText, BarChart3, Star, Timer, Target, Award, CalendarCheck,
 } from "lucide-react";
 import { C, PALETTE, axisProps, tooltipProps, KpiCard, ChartCard, InsightList, Legend, RankTable, StatusBadge } from "./primitives";
+import { pendingCounts } from "./approvals";
 
 const months = ["Mai", "Jun", "Jul", "Ago", "Set", "Out"];
 
@@ -292,7 +293,7 @@ export function EmpresasTab() {
         <KpiCard label="Empresas ativas" value="30" delta={7.1} icon={Building2} />
         <KpiCard label="Novas no mês" value="3" delta={50} icon={Handshake} tone="success" />
         <KpiCard label="Vagas enviadas por empresas" value="18" delta={12} icon={Send} tone="warning" hint="no mês" />
-        <KpiCard label="Aguardando aprovação" value="2" icon={Hourglass} tone="info" hint="vagas de empresas parceiras" />
+        <KpiCard label="Aguardando aprovação" value={String(pendingCounts.total)} icon={Hourglass} tone="info" hint="vagas e empresas parceiras" />
       </div>
 
       <div className="grid gap-5 xl:grid-cols-3">

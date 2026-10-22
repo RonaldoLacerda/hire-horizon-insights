@@ -4,6 +4,7 @@ import { Users, Briefcase, Building2, Workflow, FileText, Filter, CalendarRange,
 import { SystemHeader } from "@/components/system/SystemHeader";
 import { CandidatosTab, VagasTab, EmpresasTab, ProcessosTab } from "@/components/dash/tabs";
 import { AlertBanner } from "@/components/dash/primitives";
+import { pendingCounts, pendingSummary } from "@/components/dash/approvals";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,14 +50,16 @@ function Index() {
           </div>
         </div>
 
-        <div className="mt-5">
-          <AlertBanner
-            icon={Inbox}
-            action={<button onClick={() => setActive("vagas")} className="shrink-0 rounded-md bg-warning px-3 py-1.5 text-xs font-bold uppercase text-brand-foreground">Ver aprovações</button>}
-          >
-            Você tem <strong>2 vagas</strong> de empresa parceira aguardando aprovação.
-          </AlertBanner>
-        </div>
+        {pendingSummary() !== "" && (
+          <div className="mt-5">
+            <AlertBanner
+              icon={Inbox}
+              action={<button onClick={() => setActive(pendingCounts.vagas > 0 ? "vagas" : "empresas")} className="shrink-0 rounded-md bg-warning px-3 py-1.5 text-xs font-bold uppercase text-brand-foreground">Ver aprovações</button>}
+            >
+              Você tem <strong>{pendingSummary()}</strong> aguardando aprovação.
+            </AlertBanner>
+          </div>
+        )}
 
         <div role="tablist" className="mt-5 flex gap-1 overflow-x-auto border-b">
           {tabs.map((t) => {
