@@ -4,7 +4,7 @@ import {
 } from "recharts";
 import {
   Users, UserCheck, GraduationCap, MapPin, Briefcase, BriefcaseBusiness, Clock, XCircle,
-  Building2, Handshake, Star, Timer, Target, Award, CalendarCheck,
+  Building2, Handshake, Accessibility, Send, Hourglass, FileText, BarChart3, Star, Timer, Target, Award, CalendarCheck,
 } from "lucide-react";
 import { C, PALETTE, axisProps, tooltipProps, KpiCard, ChartCard, InsightList, Legend, RankTable, StatusBadge } from "./primitives";
 
@@ -79,7 +79,7 @@ export function CandidatosTab() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard label="Candidatos cadastrados" value="773" delta={13.5} icon={Users} />
         <KpiCard label="Contratados" value="105" delta={19} icon={UserCheck} tone="success" />
-        <KpiCard label="Aptos a estágio" value="302" delta={6.2} icon={GraduationCap} tone="info" hint="estudantes ativos" />
+        <KpiCard label="Pessoas com Deficiência (PCD)" value="52" delta={6.2} icon={Accessibility} tone="info" hint="7% da base" />
         <KpiCard label="Perfil completo" value="68%" delta={-2.1} icon={Target} tone="warning" hint="currículos 100% preenchidos" />
       </div>
 
@@ -291,8 +291,8 @@ export function EmpresasTab() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard label="Empresas ativas" value="30" delta={7.1} icon={Building2} />
         <KpiCard label="Novas no mês" value="3" delta={50} icon={Handshake} tone="success" />
-        <KpiCard label="Satisfação (NPS)" value="72" delta={4} icon={Star} tone="warning" hint="pesquisa de feedback" />
-        <KpiCard label="Estagiários alocados" value="52" delta={10.6} icon={GraduationCap} tone="info" hint="contratos vigentes" />
+        <KpiCard label="Vagas enviadas por empresas" value="18" delta={12} icon={Send} tone="warning" hint="no mês" />
+        <KpiCard label="Aguardando aprovação" value="2" icon={Hourglass} tone="info" hint="vagas de empresas parceiras" />
       </div>
 
       <div className="grid gap-5 xl:grid-cols-3">
@@ -369,8 +369,8 @@ export function ProcessosTab() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard label="Processos em andamento" value="86" delta={5.3} icon={Timer} />
         <KpiCard label="Taxa de conversão" value="8,5%" delta={1.2} icon={Target} tone="success" hint="inscrito → aprovado" />
-        <KpiCard label="Entrevistas agendadas" value="42" delta={18} icon={CalendarCheck} tone="info" hint="próximos 7 dias" />
-        <KpiCard label="Time to hire" value="21 dias" delta={-9} icon={Award} tone="warning" hint="média geral" />
+        <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} tone="info" hint="últimos 90 dias" />
+        <KpiCard label="Média de candidaturas por vaga" value="26,6" delta={3.4} icon={BarChart3} tone="warning" hint="vagas ativas" />
       </div>
 
       <div className="grid gap-5 xl:grid-cols-3">
