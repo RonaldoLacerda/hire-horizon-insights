@@ -6,9 +6,53 @@ import {
   Users, UserCheck, GraduationCap, MapPin, Briefcase, BriefcaseBusiness, Clock, XCircle,
   Building2, Handshake, Star, Timer, Target, Award, CalendarCheck,
 } from "lucide-react";
-import { C, PALETTE, axisProps, tooltipProps, KpiCard, ChartCard, InsightList, Legend, RankTable } from "./primitives";
+import { C, PALETTE, axisProps, tooltipProps, KpiCard, ChartCard, InsightList, Legend, RankTable, StatusBadge } from "./primitives";
 
 const months = ["Mai", "Jun", "Jul", "Ago", "Set", "Out"];
+
+const porDia = [
+  { d: "Seg", v: 24 }, { d: "Ter", v: 31 }, { d: "Qua", v: 29 }, { d: "Qui", v: 38 },
+  { d: "Sex", v: 42 }, { d: "Sáb", v: 18 }, { d: "Dom", v: 12 },
+];
+const picoDia = Math.max(...porDia.map((p) => p.v));
+
+const vagasRecentes = [
+  { vaga: "Agente Comunitário de Saúde", area: "Saúde", cand: 31, status: "Ativa", data: "20/10/2026" },
+  { vaga: "Auxiliar de Serviços Gerais", area: "Serviços Gerais", cand: 19, status: "Ativa", data: "18/10/2026" },
+  { vaga: "Recepcionista — UAI Jardim Canadá", area: "Administrativo", cand: 44, status: "Em seleção", data: "15/10/2026" },
+  { vaga: "Vendedor(a) — Loja de Materiais", area: "Comercial", cand: 27, status: "Stand by", data: "11/10/2026" },
+  { vaga: "Eletricista de Manutenção Predial", area: "Manutenção", cand: 12, status: "Ativa", data: "08/10/2026" },
+];
+
+function VagasRecentes() {
+  return (
+    <ChartCard title="Vagas recentes" subtitle="Últimas publicadas" action={<button className="text-xs font-semibold text-brand hover:underline">Ver todas</button>}>
+      <div className="-mx-5 overflow-x-auto">
+        <table className="w-full min-w-[640px] text-sm">
+          <thead>
+            <tr className="border-b text-left text-overline text-muted-foreground">
+              <th className="px-5 py-2 font-semibold">Vaga</th><th className="py-2 font-semibold">Área</th>
+              <th className="py-2 font-semibold">Candidaturas</th><th className="py-2 font-semibold">Status</th>
+              <th className="py-2 font-semibold">Publicada em</th><th className="px-5 py-2" />
+            </tr>
+          </thead>
+          <tbody>
+            {vagasRecentes.map((v) => (
+              <tr key={v.vaga} className="border-b last:border-0 hover:bg-muted/50">
+                <td className="px-5 py-3 font-medium">{v.vaga}</td>
+                <td className="py-3 text-muted-foreground">{v.area}</td>
+                <td className="py-3 tabular-nums">{v.cand}</td>
+                <td className="py-3"><StatusBadge status={v.status} /></td>
+                <td className="py-3 tabular-nums text-muted-foreground">{v.data}</td>
+                <td className="px-5 py-3 text-right"><button className="text-xs font-semibold text-brand hover:underline">Alterar status</button></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </ChartCard>
+  );
+}
 
 /* ---------------- CANDIDATOS ---------------- */
 const cadastros = months.map((m, i) => ({ m, cadastros: [92, 110, 134, 121, 148, 168][i], contratados: [12, 15, 18, 14, 21, 25][i] }));

@@ -75,6 +75,23 @@ export function ChartCard({
   );
 }
 
+export function AlertBanner({ icon: Icon, children, action }: { icon: LucideIcon; children: ReactNode; action?: ReactNode }) {
+  return (
+    <div className="flex flex-col gap-3 rounded-lg border border-warning/30 bg-warning-soft px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+      <p className="flex items-center gap-2.5 text-sm text-foreground"><Icon className="h-4 w-4 shrink-0 text-warning" />{children}</p>
+      {action}
+    </div>
+  );
+}
+
+export function StatusBadge({ status }: { status: string }) {
+  const map: Record<string, string> = {
+    Ativa: "bg-success-soft text-success", "Em seleção": "bg-info-soft text-info",
+    "Stand by": "bg-warning-soft text-warning", Fechada: "bg-muted text-muted-foreground",
+  };
+  return <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${map[status] ?? "bg-muted text-muted-foreground"}`}>{status}</span>;
+}
+
 export function InsightList({ items }: { items: string[] }) {
   return (
     <section className="rounded-lg border border-brand/20 bg-accent p-5">
