@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Users, Briefcase, Building2, Workflow, FileText, Filter, CalendarRange } from "lucide-react";
+import { Users, Briefcase, Building2, Workflow, FileText, Filter, CalendarRange, Inbox } from "lucide-react";
 import { SystemHeader } from "@/components/system/SystemHeader";
 import { CandidatosTab, VagasTab, EmpresasTab, ProcessosTab } from "@/components/dash/tabs";
+import { AlertBanner } from "@/components/dash/primitives";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -46,6 +47,15 @@ function Index() {
               <Filter className="h-4 w-4" /> Filtrar
             </button>
           </div>
+        </div>
+
+        <div className="mt-5">
+          <AlertBanner
+            icon={Inbox}
+            action={<button onClick={() => setActive("vagas")} className="shrink-0 rounded-md bg-warning px-3 py-1.5 text-xs font-bold uppercase text-brand-foreground">Ver aprovações</button>}
+          >
+            Você tem <strong>2 vagas</strong> de empresa parceira aguardando aprovação.
+          </AlertBanner>
         </div>
 
         <div role="tablist" className="mt-5 flex gap-1 overflow-x-auto border-b">

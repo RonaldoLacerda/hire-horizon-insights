@@ -261,6 +261,8 @@ export function VagasTab() {
         </ChartCard>
       </div>
 
+      <VagasRecentes />
+
       <InsightList items={[
         "Vagas de TI levam 34 dias para fechar — 62% acima da média geral.",
         "23 vagas estão sem movimentação há mais de 30 dias.",
