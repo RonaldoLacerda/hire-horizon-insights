@@ -8,3 +8,9 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Dashboard architecture
+- Keep prototype datasets in `src/components/dash/data.ts` and approval examples in `approvals.ts`; shared sources keep related indicators consistent.
+- Compose the four dashboard tabs with shared chart and KPI primitives; client-priority distributions precede legacy operational analysis.
+- Keep approval visibility in the pure `approvalsForTab` helper and cover empty and tab-specific behavior with unit tests.
+- This dashboard is a frontend prototype with explicitly labeled fictional data, not a live reporting or approval service.
