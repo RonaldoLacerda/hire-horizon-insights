@@ -1,430 +1,182 @@
-import {
-  Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Funnel, FunnelChart, LabelList,
-  Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis,
-} from "recharts";
-import {
-  Users, UserCheck, GraduationCap, MapPin, Briefcase, BriefcaseBusiness, Clock, XCircle,
-  Building2, Handshake, Accessibility, Send, Hourglass, FileText, BarChart3, Star, Timer, Target, Award, CalendarCheck,
-} from "lucide-react";
-import { C, PALETTE, axisProps, tooltipProps, KpiCard, ChartCard, InsightList, Legend, RankTable, StatusBadge } from "./primitives";
-import { pendingCounts } from "./approvals";
+import { useState } from "react";
+import { Users, UserCheck, GraduationCap, MapPin, BriefcaseBusiness, Clock, XCircle, Building2, Accessibility, Send, Hourglass, FileText, Timer, Target, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { KpiCard, ChartCard, InsightList, RankTable, StatusBadge } from "./primitives";
+import { DistributionChart, TimelineChart, SectionHeading } from "./charts";
+import { pendingApprovals, pendingCounts } from "./approvals";
+import { months, escolaridade, escolaridadeVagas, bairros, origem, faixa, situacao, areas, topEmpresas, vagasRecentes, recrutadores } from "./data";
 
-const months = ["Mai", "Jun", "Jul", "Ago", "Set", "Out"];
-
-const porDia = [
-  { d: "Seg", v: 24 }, { d: "Ter", v: 31 }, { d: "Qua", v: 29 }, { d: "Qui", v: 38 },
-  { d: "Sex", v: 42 }, { d: "Sáb", v: 18 }, { d: "Dom", v: 12 },
-];
-const picoDia = Math.max(...porDia.map((p) => p.v));
-
-const vagasRecentes = [
-  { vaga: "Agente Comunitário de Saúde", area: "Saúde", cand: 31, status: "Ativa", data: "20/10/2026" },
-  { vaga: "Auxiliar de Serviços Gerais", area: "Serviços Gerais", cand: 19, status: "Ativa", data: "18/10/2026" },
-  { vaga: "Recepcionista — UAI Jardim Canadá", area: "Administrativo", cand: 44, status: "Em seleção", data: "15/10/2026" },
-  { vaga: "Vendedor(a) — Loja de Materiais", area: "Comercial", cand: 27, status: "Stand by", data: "11/10/2026" },
-  { vaga: "Eletricista de Manutenção Predial", area: "Manutenção", cand: 12, status: "Ativa", data: "08/10/2026" },
-];
+const grid = "grid gap-5 lg:grid-cols-2 xl:grid-cols-3";
+const kpis = "grid gap-4 sm:grid-cols-2 xl:grid-cols-4";
+const series = (values: number[], key = "value") => months.map((m, i) => ({ m, [key]: values[i] ?? 0 }));
 
 function VagasRecentes() {
-  return (
-    <ChartCard title="Vagas recentes" subtitle="Últimas publicadas" action={<button className="text-xs font-semibold text-brand hover:underline">Ver todas</button>}>
-      <div className="-mx-5 overflow-x-auto">
-        <table className="w-full min-w-[640px] text-sm">
-          <thead>
-            <tr className="border-b text-left text-overline text-muted-foreground">
-              <th className="px-5 py-2 font-semibold">Vaga</th><th className="py-2 font-semibold">Área</th>
-              <th className="py-2 font-semibold">Candidaturas</th><th className="py-2 font-semibold">Status</th>
-              <th className="py-2 font-semibold">Publicada em</th><th className="px-5 py-2" />
-            </tr>
-          </thead>
-          <tbody>
-            {vagasRecentes.map((v) => (
-              <tr key={v.vaga} className="border-b last:border-0 hover:bg-muted/50">
-                <td className="px-5 py-3 font-medium">{v.vaga}</td>
-                <td className="py-3 text-muted-foreground">{v.area}</td>
-                <td className="py-3 tabular-nums">{v.cand}</td>
-                <td className="py-3"><StatusBadge status={v.status} /></td>
-                <td className="py-3 tabular-nums text-muted-foreground">{v.data}</td>
-                <td className="px-5 py-3 text-right"><button className="text-xs font-semibold text-brand hover:underline">Alterar status</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </ChartCard>
-  );
+  const [rows, setRows] = useState(vagasRecentes);
+  return <ChartCard title="Vagas recentes" subtitle="Últimas publicadas">
+    <div className="overflow-x-auto"><table className="w-full min-w-[740px] text-sm">
+      <thead><tr className="border-b text-left text-overline text-muted-foreground">{["Vaga", "Área", "Candidaturas", "Status", "Publicada em", ""].map((h, i) => <th key={i} className="px-3 py-3 font-medium">{h}</th>)}</tr></thead>
+      <tbody>{rows.map((v) => <tr key={v.vaga} className="border-b last:border-0 hover:bg-muted/50">
+        <td className="px-3 py-3 font-medium">{v.vaga}</td><td className="px-3 py-3 text-muted-foreground">{v.area}</td><td className="px-3 py-3 tabular-nums">{v.cand}</td>
+        <td className="px-3 py-3"><StatusBadge status={v.status} /></td><td className="px-3 py-3 text-muted-foreground">{v.data}</td>
+        <td className="px-3 py-3"><label className="sr-only" htmlFor={`status-${v.vaga}`}>Status de {v.vaga}</label><select id={`status-${v.vaga}`} className="h-8 rounded-md border bg-card px-2 text-xs" value={v.status} onChange={(e) => setRows(rows.map((row) => row.vaga === v.vaga ? { ...row, status: e.target.value } : row))}>
+          {["Ativa", "Em seleção", "Stand by", "Fechada"].map((s) => <option key={s}>{s}</option>)}
+        </select></td>
+      </tr>)}</tbody>
+    </table></div>
+  </ChartCard>;
 }
 
-/* ---------------- CANDIDATOS ---------------- */
-const cadastros = months.map((m, i) => ({ m, cadastros: [92, 110, 134, 121, 148, 168][i], contratados: [12, 15, 18, 14, 21, 25][i] }));
-const escolaridade = [
-  { name: "Superior", value: 312 }, { name: "Médio/Básico", value: 248 },
-  { name: "Técnico", value: 158 }, { name: "Pós-graduação", value: 55 },
-];
-const origem = [
-  { name: "Site de vagas", v: 284 }, { name: "LinkedIn", v: 196 }, { name: "Indicação", v: 121 },
-  { name: "Instituição de ensino", v: 98 }, { name: "Redes sociais", v: 74 },
-];
-const faixa = [
-  { f: "16-18", v: 88 }, { f: "19-21", v: 214 }, { f: "22-25", v: 236 },
-  { f: "26-30", v: 132 }, { f: "31-40", v: 71 }, { f: "40+", v: 32 },
-];
-const cidades = [
-  { name: "São Paulo", value: 248 }, { name: "Campinas", value: 132 }, { name: "Santo André", value: 96 },
-  { name: "Guarulhos", value: 74 }, { name: "Osasco", value: 58 },
-];
+function Aprovacoes({ kind }: { kind: "vaga" | "empresa" }) {
+  const items = pendingApprovals.filter((p) => p.kind === kind);
+  if (items.length === 0) return null;
+  return <div id="aprovacoes"><ChartCard title={kind === "vaga" ? "Solicitações de vagas pendentes" : "Empresas aguardando aprovação"} subtitle="Solicitações recebidas">
+    <div className="overflow-x-auto"><table className="w-full min-w-[480px] text-sm">
+      <thead><tr className="border-b text-left text-overline text-muted-foreground"><th className="py-3 font-medium">{kind === "vaga" ? "Vaga" : "Empresa"}</th><th className="py-3 font-medium">{kind === "vaga" ? "Empresa" : "Setor"}</th><th className="py-3 font-medium">Recebida em</th><th className="py-3 font-medium">Situação</th></tr></thead>
+      <tbody>{items.map((p) => <tr key={p.id} className="border-b last:border-0"><td className="py-3 font-medium">{p.name}</td><td className="py-3 text-muted-foreground">{p.org}</td><td className="py-3 text-muted-foreground">{p.sentAt}</td><td className="py-3 text-warning">Pendente</td></tr>)}</tbody>
+    </table></div>
+  </ChartCard></div>;
+}
 
 export function CandidatosTab() {
-  return (
-    <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Candidatos cadastrados" value="773" delta={13.5} icon={Users} />
-        <KpiCard label="Contratados" value="105" delta={19} icon={UserCheck} tone="success" />
-        <KpiCard label="Pessoas com Deficiência (PCD)" value="52" delta={6.2} icon={Accessibility} tone="info" hint="7% da base" />
-        <KpiCard label="Perfil completo" value="68%" delta={-2.1} icon={Target} tone="warning" hint="currículos 100% preenchidos" />
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-3">
-        <ChartCard title="Evolução de cadastros e contratações" subtitle="Últimos 6 meses" className="xl:col-span-2">
-          <ResponsiveContainer width="100%" height={260}>
-            <AreaChart data={cadastros} margin={{ left: -20, right: 8 }}>
-              <defs>
-                <linearGradient id="gCad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={C.c1} stopOpacity={0.3} />
-                  <stop offset="100%" stopColor={C.c1} stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid stroke={C.grid} vertical={false} />
-              <XAxis dataKey="m" {...axisProps} />
-              <YAxis {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Area type="monotone" dataKey="cadastros" name="Cadastros" stroke={C.c1} strokeWidth={2} fill="url(#gCad)" />
-              <Area type="monotone" dataKey="contratados" name="Contratados" stroke={C.c3} strokeWidth={2} fill="transparent" />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Candidatos por escolaridade" subtitle="Base total">
-          <div className="grid grid-cols-[140px_1fr] items-center gap-4">
-            <ResponsiveContainer width="100%" height={140}>
-              <PieChart>
-                <Pie data={escolaridade} dataKey="value" innerRadius={44} outerRadius={66} paddingAngle={2} stroke="none">
-                  {escolaridade.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
-                </Pie>
-                <Tooltip {...tooltipProps} />
-              </PieChart>
-            </ResponsiveContainer>
-            <Legend items={escolaridade.map((e, i) => ({ name: e.name, value: e.value, color: PALETTE[i] }))} />
-          </div>
-        </ChartCard>
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-3">
-        <ChartCard title="Origem dos candidatos" subtitle="Canal de captação">
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={origem} layout="vertical" margin={{ left: 10 }}>
-              <XAxis type="number" hide />
-              <YAxis type="category" dataKey="name" width={120} {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Bar dataKey="v" name="Candidatos" fill={C.c2} radius={[0, 4, 4, 0]} barSize={14} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Faixa etária" subtitle="Distribuição por idade">
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={faixa} margin={{ left: -20 }}>
-              <CartesianGrid stroke={C.grid} vertical={false} />
-              <XAxis dataKey="f" {...axisProps} />
-              <YAxis {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Bar dataKey="v" name="Candidatos" fill={C.c1} radius={[4, 4, 0, 0]} barSize={22} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Principais cidades" subtitle="Onde estão os candidatos" action={<MapPin className="h-4 w-4 text-muted-foreground" />}>
-          <RankTable rows={cidades} valueLabel="Candidatos" />
-        </ChartCard>
-      </div>
-
-      <ChartCard title="Candidaturas por dia — últimos 7 dias" subtitle="Picos destacados indicam melhores dias para divulgar vagas">
-        <ResponsiveContainer width="100%" height={220}>
-          <BarChart data={porDia} margin={{ left: -20, top: 18 }}>
-            <XAxis dataKey="d" {...axisProps} />
-            <YAxis hide />
-            <Tooltip {...tooltipProps} />
-            <Bar dataKey="v" name="Candidaturas" radius={[6, 6, 0, 0]} barSize={34}>
-              {porDia.map((p, i) => <Cell key={i} fill={p.v >= picoDia * 0.85 ? C.c1 : "var(--muted)"} />)}
-              <LabelList dataKey="v" position="top" fill="var(--foreground)" fontSize={12} fontWeight={600} />
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </ChartCard>
-
-      <InsightList items={[
-        "Quinta e sexta concentram 41% das candidaturas da semana — publique vagas novas no início da semana.",
-        "Cadastros cresceram 13,5% no mês, puxados por Site de vagas e LinkedIn.",
-        "32% da base ainda tem currículo incompleto — considere campanha de atualização.",
-        "Faixa 19–25 anos concentra 58% dos candidatos: alto potencial para programas de estágio.",
-      ]} />
+  return <div className="space-y-5">
+    <div className={kpis}>
+      <KpiCard label="Candidatos cadastrados" value="773" delta={13.5} icon={Users} />
+      <KpiCard label="Bairro com mais candidatos" value="Centro" icon={MapPin} tone="success" hint="148 candidatos · 19,1% da base" />
+      <KpiCard label="Pessoas com deficiência" value="52" icon={Accessibility} tone="info" hint="6,7% da base cadastrada" />
+      <KpiCard label="Jovem Aprendiz" value="180" icon={GraduationCap} tone="warning" hint="candidatos interessados" />
     </div>
-  );
+    <SectionHeading title="Perfil dos candidatos" note="Base cadastrada" />
+    <div className={grid}>
+      <DistributionChart title="Escolaridade dos candidatos" data={escolaridade} donut />
+      <DistributionChart title="Escolaridade mínima exigida pelas vagas" data={escolaridadeVagas} />
+      <DistributionChart title="Faixa etária" data={faixa} />
+      <ChartCard title="Bairros dos candidatos" subtitle="8 maiores concentrações"><RankTable rows={bairros} valueLabel="Candidatos" /></ChartCard>
+      <DistributionChart title="Área de interesse dos candidatos" subtitle="Interesse principal informado" data={[{ name: "Administrativo", value: 220 }, { name: "Comercial", value: 175 }, { name: "TI", value: 138 }, { name: "Operações", value: 110 }, { name: "Financeiro", value: 80 }, { name: "Outras", value: 50 }]} />
+      <DistributionChart title="Perfil de cadastro" data={[{ name: "Completo", value: 526 }, { name: "Incompleto", value: 247 }]} donut />
+    </div>
+    <SectionHeading title="Captação e evolução da base" note="Histórico e canais de origem" />
+    <div className={grid}>
+      <TimelineChart title="Candidaturas por dia" subtitle="Últimos 7 dias" bars data={[{ m: "Seg", value: 24 }, { m: "Ter", value: 31 }, { m: "Qua", value: 29 }, { m: "Qui", value: 38 }, { m: "Sex", value: 42 }, { m: "Sáb", value: 18 }, { m: "Dom", value: 12 }]} series={[{ key: "value", name: "Candidaturas" }]} />
+      <DistributionChart title="Candidatos por canal de origem" data={origem} />
+      <TimelineChart title="Cadastros e contratações" subtitle="Últimos 6 meses" data={months.map((m, i) => ({ m, cadastros: [92, 110, 134, 121, 148, 168][i] ?? 0, contratados: [12, 15, 18, 14, 21, 25][i] ?? 0 }))} series={[{ key: "cadastros", name: "Cadastros" }, { key: "contratados", name: "Contratados" }]} />
+    </div>
+    <div className="grid gap-5 lg:grid-cols-2">
+      <DistributionChart title="Situação cadastral" subtitle="Status atual · 773 candidatos" data={[{ name: "Ativos", value: 680 }, { name: "Inativos", value: 93 }]} donut />
+      <TimelineChart title="Movimentação cadastral" subtitle="Cadastros, atualizações e exclusões por mês" bars data={months.map((m, i) => ({ m, novos: [92, 110, 134, 121, 148, 168][i] ?? 0, atualizados: [45, 58, 67, 63, 82, 94][i] ?? 0, excluidos: [3, 5, 4, 6, 4, 7][i] ?? 0 }))} series={[{ key: "novos", name: "Cadastrados" }, { key: "atualizados", name: "Atualizados" }, { key: "excluidos", name: "Excluídos" }]} />
+    </div>
+    <InsightList items={["Centro concentra 148 candidatos; os oito principais bairros somam 673 pessoas.", "247 candidatos têm cadastro incompleto — oportunidade para uma campanha de atualização.", "Quinta e sexta concentram 41% das candidaturas da semana."]} />
+  </div>;
 }
-
-/* ---------------- VAGAS ---------------- */
-const situacao = [
-  { name: "Abertas", value: 214 }, { name: "Prospecção", value: 14 }, { name: "Stand by", value: 9 },
-  { name: "Solicitando doc.", value: 4 }, { name: "Fechadas", value: 7 }, { name: "Canceladas", value: 7 },
-];
-const vagasMes = months.map((m, i) => ({ m, abertas: [32, 41, 38, 45, 52, 47][i], fechadas: [8, 11, 9, 14, 12, 16][i] }));
-const areas = [
-  { a: "Administrativo", v: 62 }, { a: "Comercial", v: 48 }, { a: "TI", v: 41 },
-  { a: "Operações", v: 36 }, { a: "Financeiro", v: 28 }, { a: "Marketing", v: 21 },
-];
-const tipo = [{ name: "CLT", value: 128 }, { name: "Estágio", value: 84 }, { name: "Jovem aprendiz", value: 26 }, { name: "PJ / Temporário", value: 17 }];
-const tempoArea = [
-  { a: "TI", d: 34 }, { a: "Financeiro", d: 26 }, { a: "Comercial", d: 19 }, { a: "Administrativo", d: 15 }, { a: "Operações", d: 12 },
-];
 
 export function VagasTab() {
-  return (
-    <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Vagas abertas" value="214" delta={4.1} icon={BriefcaseBusiness} tone="info" />
-        <KpiCard label="Taxa de preenchimento" value="78%" delta={4} icon={Target} tone="success" hint="vagas preenchidas no prazo" />
-        <KpiCard label="Tempo médio p/ fechar" value="21 dias" delta={-12} icon={Clock} tone="success" hint="mais rápido que set." />
-        <KpiCard label="Vagas paradas +30 dias" value="23" delta={9} icon={XCircle} tone="danger" hint="exigem atenção" />
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-3">
-        <ChartCard title="Situação das vagas" subtitle="Status atual">
-          <div className="grid grid-cols-[140px_1fr] items-center gap-4">
-            <ResponsiveContainer width="100%" height={150}>
-              <PieChart>
-                <Pie data={situacao} dataKey="value" innerRadius={46} outerRadius={68} paddingAngle={2} stroke="none">
-                  {situacao.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
-                </Pie>
-                <Tooltip {...tooltipProps} />
-              </PieChart>
-            </ResponsiveContainer>
-            <Legend items={situacao.map((e, i) => ({ name: e.name, value: e.value, color: PALETTE[i] }))} />
-          </div>
-        </ChartCard>
-        <ChartCard title="Abertura x fechamento de vagas" subtitle="Últimos 6 meses" className="xl:col-span-2">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={vagasMes} margin={{ left: -20 }}>
-              <CartesianGrid stroke={C.grid} vertical={false} />
-              <XAxis dataKey="m" {...axisProps} />
-              <YAxis {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Bar dataKey="abertas" name="Abertas" fill={C.c2} radius={[4, 4, 0, 0]} barSize={18} />
-              <Bar dataKey="fechadas" name="Fechadas" fill={C.c1} radius={[4, 4, 0, 0]} barSize={18} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-3">
-        <ChartCard title="Vagas por área">
-          <ResponsiveContainer width="100%" height={230}>
-            <BarChart data={areas} layout="vertical" margin={{ left: 10 }}>
-              <XAxis type="number" hide />
-              <YAxis type="category" dataKey="a" width={100} {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Bar dataKey="v" name="Vagas" fill={C.c1} radius={[0, 4, 4, 0]} barSize={14} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Tipo de contratação" subtitle="Inclui vagas de estágio">
-          <div className="space-y-4 pt-2">
-            {tipo.map((t, i) => {
-              const pct = Math.round((t.value / 255) * 100);
-              return (
-                <div key={t.name}>
-                  <div className="flex justify-between text-sm"><span>{t.name}</span><span className="font-medium tabular-nums">{t.value} <span className="text-muted-foreground">· {pct}%</span></span></div>
-                  <div className="mt-1.5 h-2 rounded-full bg-muted"><div className="h-full rounded-full" style={{ width: `${pct}%`, background: PALETTE[i] }} /></div>
-                </div>
-              );
-            })}
-          </div>
-        </ChartCard>
-        <ChartCard title="Tempo médio de fechamento" subtitle="Dias por área">
-          <ResponsiveContainer width="100%" height={230}>
-            <BarChart data={tempoArea} margin={{ left: -20 }}>
-              <CartesianGrid stroke={C.grid} vertical={false} />
-              <XAxis dataKey="a" {...axisProps} interval={0} fontSize={10} />
-              <YAxis {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Bar dataKey="d" name="Dias" radius={[4, 4, 0, 0]} barSize={22}>
-                {tempoArea.map((t, i) => <Cell key={i} fill={t.d > 25 ? C.c1 : C.c6} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <VagasRecentes />
-
-      <InsightList items={[
-        "Vagas de TI levam 34 dias para fechar — 62% acima da média geral.",
-        "23 vagas estão sem movimentação há mais de 30 dias.",
-        "Estágio representa 33% das vagas: maior participação dos últimos 6 meses.",
-      ]} />
+  return <div className="space-y-5">
+    <div className={kpis}>
+      <KpiCard label="Vagas ativas" value="214" delta={4.1} icon={BriefcaseBusiness} tone="info" />
+      <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} />
+      <KpiCard label="Vagas fechadas" value="7" icon={CheckCircle2} tone="success" hint="situação atual" />
+      <KpiCard label="Vagas aguardando aprovação" value={String(pendingCounts.vagas)} icon={Hourglass} tone="warning" hint="enviadas por empresas parceiras" />
     </div>
-  );
+    <SectionHeading title="Distribuição das vagas" note="255 vagas cadastradas" />
+    <div className={grid}>
+      <DistributionChart title="Vagas por status" data={situacao} donut />
+      <DistributionChart title="Vagas por área" data={areas} />
+      <DistributionChart title="Vagas por modalidade" data={[{ name: "Presencial", value: 168 }, { name: "Híbrido", value: 58 }, { name: "Remoto", value: 29 }]} donut />
+      <DistributionChart title="Vagas por origem" data={[{ name: "Equipe interna", value: 181 }, { name: "Empresas parceiras", value: 74 }]} donut />
+      <DistributionChart title="Vagas por faixa salarial" data={[{ name: "Até R$ 1.500", value: 35 }, { name: "R$ 1.501–2.500", value: 98 }, { name: "R$ 2.501–4.000", value: 72 }, { name: "Acima de R$ 4.000", value: 30 }, { name: "A combinar", value: 20 }]} />
+      <DistributionChart title="Escolaridade mínima exigida" data={escolaridadeVagas} />
+    </div>
+    <VagasRecentes /><Aprovacoes kind="vaga" />
+    <SectionHeading title="Acompanhamento das vagas" note="Eficiência e histórico" />
+    <div className={kpis}>
+      <KpiCard label="Taxa de preenchimento" value="78%" delta={4} icon={Target} tone="success" hint="vagas do período" />
+      <KpiCard label="Tempo médio para fechar" value="21 dias" icon={Clock} tone="info" hint="vagas concluídas no período" />
+      <KpiCard label="Sem movimentação há 30+ dias" value="23" icon={XCircle} tone="danger" hint="vagas que exigem atenção" />
+      <KpiCard label="Contratados" value="105" delta={19} icon={UserCheck} tone="success" hint="últimos 6 meses" />
+    </div>
+    <div className={grid}>
+      <TimelineChart title="Abertura e fechamento de vagas" bars data={months.map((m, i) => ({ m, abertas: [32, 41, 38, 45, 52, 47][i] ?? 0, fechadas: [8, 11, 9, 14, 12, 16][i] ?? 0 }))} series={[{ key: "abertas", name: "Abertas" }, { key: "fechadas", name: "Fechadas" }]} />
+      <DistributionChart title="Tipo de contratação" data={[{ name: "CLT", value: 128 }, { name: "Estágio", value: 84 }, { name: "Jovem Aprendiz", value: 26 }, { name: "PJ / Temporário", value: 17 }]} donut />
+      <DistributionChart title="Tempo médio de fechamento" subtitle="Dias por área" data={[{ name: "TI", value: 34 }, { name: "Financeiro", value: 26 }, { name: "Comercial", value: 19 }, { name: "Administrativo", value: 15 }, { name: "Operações", value: 12 }]} />
+    </div>
+    <InsightList items={["214 vagas estão abertas; 23 estão sem movimentação há mais de 30 dias.", "Administrativo e Comercial concentram 121 das 255 vagas cadastradas.", "TI tem o maior tempo de fechamento: 34 dias, contra 21 dias na média geral."]} />
+  </div>;
 }
-
-/* ---------------- EMPRESAS ---------------- */
-const topEmpresas = [
-  { name: "Grupo Alfa Logística", value: 38, sub: "Logística" }, { name: "Banco Horizonte", value: 31, sub: "Financeiro" },
-  { name: "TechNova Sistemas", value: 27, sub: "TI" }, { name: "Varejo Bom Preço", value: 22, sub: "Varejo" },
-  { name: "Construtora Pilar", value: 15, sub: "Construção" },
-];
-const segmentos = [{ name: "Serviços", value: 11 }, { name: "Varejo", value: 7 }, { name: "Indústria", value: 5 }, { name: "TI", value: 4 }, { name: "Financeiro", value: 3 }];
-const empresasMes = months.map((m, i) => ({ m, ativas: [22, 23, 25, 26, 28, 30][i], novas: [1, 2, 3, 1, 2, 3][i] }));
-const contratosEstagio = [
-  { e: "Banco Horizonte", ativos: 18, vencendo: 3 }, { e: "TechNova", ativos: 14, vencendo: 5 },
-  { e: "Grupo Alfa", ativos: 11, vencendo: 1 }, { e: "Bom Preço", ativos: 9, vencendo: 2 },
-];
 
 export function EmpresasTab() {
-  return (
-    <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Empresas ativas" value="30" delta={7.1} icon={Building2} />
-        <KpiCard label="Novas no mês" value="3" delta={50} icon={Handshake} tone="success" />
-        <KpiCard label="Vagas enviadas por empresas" value="18" delta={12} icon={Send} tone="warning" hint="no mês" />
-        <KpiCard label="Aguardando aprovação" value={String(pendingCounts.total)} icon={Hourglass} tone="info" hint="vagas e empresas parceiras" />
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-3">
-        <ChartCard title="Empresas que mais abrem vagas" subtitle="Últimos 6 meses" className="xl:col-span-2">
-          <RankTable rows={topEmpresas} valueLabel="Vagas" />
-        </ChartCard>
-        <ChartCard title="Empresas por segmento">
-          <div className="grid grid-cols-[130px_1fr] items-center gap-4">
-            <ResponsiveContainer width="100%" height={140}>
-              <PieChart>
-                <Pie data={segmentos} dataKey="value" innerRadius={42} outerRadius={64} paddingAngle={2} stroke="none">
-                  {segmentos.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
-                </Pie>
-                <Tooltip {...tooltipProps} />
-              </PieChart>
-            </ResponsiveContainer>
-            <Legend items={segmentos.map((e, i) => ({ name: e.name, value: e.value, color: PALETTE[i] }))} />
-          </div>
-        </ChartCard>
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-2">
-        <ChartCard title="Crescimento da carteira" subtitle="Empresas ativas por mês">
-          <ResponsiveContainer width="100%" height={230}>
-            <LineChart data={empresasMes} margin={{ left: -20, right: 8 }}>
-              <CartesianGrid stroke={C.grid} vertical={false} />
-              <XAxis dataKey="m" {...axisProps} />
-              <YAxis {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Line type="monotone" dataKey="ativas" name="Ativas" stroke={C.c1} strokeWidth={2.5} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="novas" name="Novas" stroke={C.c3} strokeWidth={2} dot={{ r: 3 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Contratos de estágio por empresa" subtitle="Ativos e vencendo em 30 dias">
-          <ResponsiveContainer width="100%" height={230}>
-            <BarChart data={contratosEstagio} margin={{ left: -20 }}>
-              <CartesianGrid stroke={C.grid} vertical={false} />
-              <XAxis dataKey="e" {...axisProps} />
-              <YAxis {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Bar dataKey="ativos" name="Ativos" stackId="a" fill={C.c2} barSize={28} />
-              <Bar dataKey="vencendo" name="Vencendo" stackId="a" fill={C.c4} radius={[4, 4, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <InsightList items={[
-        "As 3 maiores empresas concentram 47% das vagas — risco de dependência da carteira.",
-        "11 contratos de estágio vencem nos próximos 30 dias; antecipe renovações.",
-        "TechNova tem o maior índice de vencimentos: agende reunião de alinhamento.",
-      ]} />
+  return <div className="space-y-5">
+    <div className={kpis}>
+      <KpiCard label="Empresas cadastradas" value="31" icon={Building2} hint="30 aprovadas e 1 pendente" />
+      <KpiCard label="Vagas enviadas" value="18" delta={12} icon={Send} tone="info" hint="no mês · 2 pendentes" />
+      <KpiCard label="Empresas aprovadas" value="30" icon={CheckCircle2} tone="success" hint="cadastros aprovados" />
+      <KpiCard label="Empresas aguardando aprovação" value={String(pendingCounts.empresas)} icon={Hourglass} tone="warning" hint="cadastros de empresas parceiras" />
     </div>
-  );
+    <SectionHeading title="Empresas parceiras" note="Setores e participação nas vagas" />
+    <div className={grid}>
+      <DistributionChart title="Empresas por setor" data={[{ name: "Serviços", value: 12 }, { name: "Varejo", value: 7 }, { name: "Indústria", value: 5 }, { name: "TI", value: 4 }, { name: "Financeiro", value: 3 }]} donut />
+      <ChartCard title="Top empresas com vagas enviadas" subtitle="Últimos 6 meses"><RankTable rows={topEmpresas} valueLabel="Vagas" /></ChartCard>
+      <DistributionChart title="Vagas enviadas por empresas" subtitle="Outubro de 2026" data={[{ name: "Grupo Alfa", value: 6 }, { name: "Banco Horizonte", value: 4 }, { name: "TechNova", value: 4 }, { name: "Bom Preço", value: 3 }, { name: "Construtora Pilar", value: 1 }]} />
+    </div>
+    <ChartCard title="Vagas enviadas por empresas parceiras" subtitle="Solicitações mais recentes"><div className="overflow-x-auto"><table className="w-full min-w-[650px] text-sm">
+      <thead><tr className="border-b text-left text-overline text-muted-foreground">{["Empresa", "Vaga", "Enviada em", "Situação"].map((h) => <th key={h} className="py-3 font-medium">{h}</th>)}</tr></thead>
+      <tbody>{[{ org: "Banco Horizonte", vaga: "Auxiliar Administrativo", date: "22/10/2026", status: "Pendente" }, { org: "Varejo Bom Preço", vaga: "Estoquista", date: "21/10/2026", status: "Pendente" }, { org: "Grupo Alfa Logística", vaga: "Assistente de Logística", date: "20/10/2026", status: "Aprovada" }, { org: "TechNova Sistemas", vaga: "Analista de Suporte", date: "19/10/2026", status: "Aprovada" }].map((r) => <tr key={r.vaga} className="border-b last:border-0"><td className="py-3 font-medium">{r.org}</td><td className="py-3">{r.vaga}</td><td className="py-3 text-muted-foreground">{r.date}</td><td className={`py-3 ${r.status === "Pendente" ? "text-warning" : "text-success"}`}>{r.status}</td></tr>)}</tbody>
+    </table></div></ChartCard>
+    <Aprovacoes kind="empresa" />
+    <SectionHeading title="Evolução da carteira e contratos" />
+    <div className="grid gap-5 lg:grid-cols-2">
+      <TimelineChart title="Crescimento da carteira" subtitle="Empresas aprovadas e novos cadastros por mês" data={months.map((m, i) => ({ m, ativas: [22, 23, 25, 26, 28, 30][i] ?? 0, novas: [1, 2, 3, 1, 2, 3][i] ?? 0 }))} series={[{ key: "ativas", name: "Aprovadas" }, { key: "novas", name: "Novas" }]} />
+      <TimelineChart title="Contratos de estágio por empresa" subtitle="Ativos e vencendo nos próximos 30 dias" bars data={[{ m: "Banco Horizonte", ativos: 18, vencendo: 3 }, { m: "TechNova", ativos: 14, vencendo: 5 }, { m: "Grupo Alfa", ativos: 11, vencendo: 1 }, { m: "Bom Preço", ativos: 9, vencendo: 2 }]} series={[{ key: "ativos", name: "Ativos" }, { key: "vencendo", name: "Vencendo" }]} />
+    </div>
+    <InsightList items={["As três maiores empresas somam 96 vagas enviadas nos últimos seis meses.", "2 vagas e 1 cadastro de empresa aguardam aprovação.", "11 contratos de estágio vencem nos próximos 30 dias; 5 são da TechNova."]} />
+  </div>;
 }
 
-/* ---------------- PROCESSOS ---------------- */
-const funil = [
-  { name: "Inscritos", value: 1240, fill: C.c2 }, { name: "Triagem", value: 640, fill: C.c5 },
-  { name: "Entrevista", value: 310, fill: C.c4 }, { name: "Teste/Dinâmica", value: 168, fill: C.c3 },
-  { name: "Aprovados", value: 105, fill: C.c1 },
-];
-const etapaTempo = [{ e: "Triagem", d: 3 }, { e: "Entrevista", d: 6 }, { e: "Teste", d: 4 }, { e: "Proposta", d: 5 }, { e: "Admissão", d: 3 }];
-const ranking = [
-  { name: "Samii Teste", value: 34 }, { name: "Administrador", value: 27 }, { name: "Jaylon Leannon", value: 19 },
-  { name: "Chaya Legros", value: 14 }, { name: "Jovan Walker", value: 11 },
-];
-const reprova = [{ name: "Perfil técnico", value: 38 }, { name: "Desistência", value: 24 }, { name: "Pretensão salarial", value: 18 }, { name: "Não compareceu", value: 20 }];
-
 export function ProcessosTab() {
-  return (
-    <div className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard label="Processos em andamento" value="86" delta={5.3} icon={Timer} />
-        <KpiCard label="Taxa de conversão" value="8,5%" delta={1.2} icon={Target} tone="success" hint="inscrito → aprovado" />
-        <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} tone="info" hint="últimos 90 dias" />
-        <KpiCard label="Média de candidaturas por vaga" value="26,6" delta={3.4} icon={BarChart3} tone="warning" hint="vagas ativas" />
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-3">
-        <ChartCard title="Funil do processo seletivo" subtitle="Conversão por etapa · últimos 90 dias" className="xl:col-span-2">
-          <ResponsiveContainer width="100%" height={280}>
-            <FunnelChart>
-              <Tooltip {...tooltipProps} />
-              <Funnel dataKey="value" data={funil} isAnimationActive>
-                <LabelList position="right" dataKey="name" fill="var(--foreground)" stroke="none" fontSize={12} />
-                <LabelList position="center" dataKey="value" fill="var(--card)" stroke="none" fontSize={12} fontWeight={600} />
-              </Funnel>
-            </FunnelChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Ranking — quem mais contratou" subtitle="Usuário responsável">
-          <RankTable rows={ranking} valueLabel="Contratações" />
-        </ChartCard>
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-2">
-        <ChartCard title="Tempo médio por etapa" subtitle="Dias — identifique gargalos">
-          <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={etapaTempo} margin={{ left: -20 }}>
-              <CartesianGrid stroke={C.grid} vertical={false} />
-              <XAxis dataKey="e" {...axisProps} />
-              <YAxis {...axisProps} />
-              <Tooltip {...tooltipProps} />
-              <Bar dataKey="d" name="Dias" radius={[4, 4, 0, 0]} barSize={28}>
-                {etapaTempo.map((t, i) => <Cell key={i} fill={t.d >= 6 ? C.c1 : C.c6} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-        <ChartCard title="Motivos de reprovação" subtitle="% dos candidatos eliminados">
-          <div className="grid grid-cols-[140px_1fr] items-center gap-4">
-            <ResponsiveContainer width="100%" height={160}>
-              <PieChart>
-                <Pie data={reprova} dataKey="value" innerRadius={46} outerRadius={70} paddingAngle={2} stroke="none">
-                  {reprova.map((_, i) => <Cell key={i} fill={PALETTE[i]} />)}
-                </Pie>
-                <Tooltip {...tooltipProps} />
-              </PieChart>
-            </ResponsiveContainer>
-            <Legend items={reprova.map((e, i) => ({ name: e.name, value: `${e.value}%`, color: PALETTE[i] }))} />
-          </div>
-        </ChartCard>
-      </div>
-
-      <InsightList items={[
-        "A etapa de Entrevista é o maior gargalo: 6 dias em média.",
-        "Triagem elimina 48% dos inscritos — revise requisitos dos anúncios.",
-        "20% de não comparecimento: ative lembretes automáticos via Agenda.",
-      ]} />
+  const [view, setView] = useState<"operacao" | "turnover">("operacao");
+  return <div className="space-y-5">
+    <div className={kpis}>
+      <KpiCard label="Processos em andamento" value="86" delta={5.3} icon={Timer} />
+      <KpiCard label="Contratados" value="105" delta={19} icon={UserCheck} tone="success" hint="últimos 6 meses" />
+      <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} tone="info" hint="últimos 6 meses" />
+      <KpiCard label="Candidatos dentro do prazo" value="86,1%" icon={Clock} tone="warning" hint="267 de 310 candidatos em seleção" />
     </div>
-  );
+    <div className="flex flex-wrap gap-2 border-b pb-3" role="tablist" aria-label="Análises de processos">
+      <Button variant={view === "operacao" ? "default" : "outline"} size="sm" role="tab" aria-selected={view === "operacao"} onClick={() => setView("operacao")}>Operação seletiva</Button>
+      <Button variant={view === "turnover" ? "default" : "outline"} size="sm" role="tab" aria-selected={view === "turnover"} onClick={() => setView("turnover")}>Turnover</Button>
+    </div>
+    {view === "operacao" ? <>
+      <SectionHeading title="Situação dos candidatos nos processos" note="Movimentações no período" />
+      <div className={grid}>
+        <DistributionChart title="Movimentação nos processos seletivos" data={[{ name: "Incluídos", value: 1240 }, { name: "Removidos", value: 186 }, { name: "Contratados", value: 105 }, { name: "Desligados", value: 12 }]} />
+        <DistributionChart title="Candidatos dentro e fora do prazo" subtitle="Candidatos em seleção" data={[{ name: "Dentro do prazo", value: 267 }, { name: "Fora do prazo", value: 43 }]} donut />
+        <DistributionChart title="Motivos de incompatibilidade" subtitle="Distribuição das reprovações (%)" data={[{ name: "Perfil técnico", value: 38 }, { name: "Desistência", value: 24 }, { name: "Pretensão salarial", value: 18 }, { name: "Não compareceu", value: 20 }]} />
+      </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+        <DistributionChart title="Tempo médio por etapa" subtitle="Dias" data={[{ name: "Triagem", value: 3 }, { name: "Entrevista", value: 6 }, { name: "Teste", value: 4 }, { name: "Proposta", value: 5 }, { name: "Admissão", value: 3 }]} />
+        <ChartCard title="Ranking de contratações" subtitle="Recrutadores e consultores"><RankTable rows={recrutadores.map((r) => ({ name: r.name, value: r.contratados }))} valueLabel="Contratados" /></ChartCard>
+      </div>
+      <ChartCard title="Desempenho por recrutador / consultor" subtitle="Últimos 6 meses"><div className="overflow-x-auto"><table className="w-full min-w-[820px] text-sm">
+        <thead><tr className="border-b text-left text-overline text-muted-foreground">{["Responsável", "Triados", "Em seleção", "Contratados", "Provas", "Dentro do prazo", "Fora do prazo"].map((h) => <th key={h} className="px-3 py-3 font-medium">{h}</th>)}</tr></thead>
+        <tbody>{recrutadores.map((r) => <tr key={r.name} className="border-b last:border-0"><td className="px-3 py-3 font-medium">{r.name}</td>{[r.triados, r.selecao, r.contratados, r.provas, r.dentro, r.fora].map((v, i) => <td key={i} className={`px-3 py-3 tabular-nums ${i === 5 ? "text-danger" : "text-muted-foreground"}`}>{v}</td>)}</tr>)}</tbody>
+      </table></div></ChartCard>
+      <InsightList items={["43 candidatos em seleção estão fora do prazo: priorize a revisão destes processos.", "Entrevista é a etapa mais demorada, com média de 6 dias.", "Ana Martins lidera as contratações: 34 dos 105 contratados no período."]} />
+    </> : <>
+      <SectionHeading title="Turnover dos candidatos contratados" note="Outubro de 2026" />
+      <div className={kpis}>
+        <KpiCard label="Taxa de turnover" value="3,5%" icon={Target} tone="warning" hint="média de admissões e desligamentos / base" />
+        <KpiCard label="Contratados no mês" value="25" icon={UserCheck} tone="success" hint="admissões em outubro" />
+        <KpiCard label="Desligados no mês" value="12" icon={XCircle} tone="danger" hint="desligamentos em outubro" />
+        <KpiCard label="Total de ativos" value="535" icon={Users} tone="info" hint="vínculos ativos ao fim do mês" />
+      </div>
+      <div className={grid}>
+        <TimelineChart title="Taxa de turnover por mês" subtitle="Taxa percentual" data={series([2.1, 2.5, 2.8, 2.2, 3.1, 3.5])} series={[{ key: "value", name: "Turnover (%)" }]} />
+        <DistributionChart title="Desligamentos por faixa etária" data={[{ name: "Até 21 anos", value: 4 }, { name: "22–30 anos", value: 5 }, { name: "31–40 anos", value: 2 }, { name: "41+ anos", value: 1 }]} />
+        <DistributionChart title="Desligamentos por sexo" data={[{ name: "Feminino", value: 6 }, { name: "Masculino", value: 5 }, { name: "Não informado", value: 1 }]} donut />
+      </div>
+      <div className="grid gap-5 lg:grid-cols-2">
+        <DistributionChart title="Motivos de desligamento" data={[{ name: "Pedido de demissão", value: 5 }, { name: "Término de contrato", value: 3 }, { name: "Desempenho", value: 2 }, { name: "Outros", value: 2 }]} />
+        <TimelineChart title="Contratados e desligados por mês" bars data={months.map((m, i) => ({ m, contratados: [12, 15, 18, 14, 21, 25][i] ?? 0, desligados: [9, 11, 12, 9, 12, 12][i] ?? 0 }))} series={[{ key: "contratados", name: "Contratados" }, { key: "desligados", name: "Desligados" }]} />
+      </div>
+      <InsightList items={["Outubro teve 25 admissões e 12 desligamentos, saldo positivo de 13 vínculos.", "Pedidos de demissão representam 5 dos 12 desligamentos do mês.", "9 desligamentos ocorreram entre pessoas de até 30 anos."]} />
+    </>}
+  </div>;
 }

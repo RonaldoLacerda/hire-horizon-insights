@@ -128,7 +128,7 @@
 @utility text-dash-title {
   font-size: 1.25rem;
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
 }
 @utility text-card-title {
   font-size: 0.875rem;
@@ -138,12 +138,12 @@
   font-size: 1.75rem;
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   font-variant-numeric: tabular-nums;
 }
 @utility text-overline {
   font-size: 0.6875rem;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
 }

@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Users, Briefcase, Building2, Workflow, FileText, Filter, CalendarRange, Inbox } from "lucide-react";
+import { Users, Briefcase, Building2, Workflow, CalendarRange, Inbox } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { SystemHeader } from "@/components/system/SystemHeader";
 import { CandidatosTab, VagasTab, EmpresasTab, ProcessosTab } from "@/components/dash/tabs";
 import { AlertBanner } from "@/components/dash/primitives";
-import { pendingCounts, pendingSummary } from "@/components/dash/approvals";
+import { approvalsForTab, pendingSummary } from "@/components/dash/approvals";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -13,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Dashboard de candidatos, vagas, empresas e processos seletivos com insights." },
       { property: "og:title", content: "Painel de Recrutamento e Seleção" },
       { property: "og:description", content: "Dashboard de candidatos, vagas, empresas e processos seletivos com insights." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,
@@ -27,36 +30,29 @@ const tabs = [
 
 function Index() {
   const [active, setActive] = useState<(typeof tabs)[number]["id"]>("candidatos");
-  const Current = tabs.find((t) => t.id === active)!.C;
+  const Current = tabs.find((t) => t.id === active)?.C ?? CandidatosTab;
+  const summary = pendingSummary(approvalsForTab(active));
   return (
     <div className="min-h-screen pb-10">
       <SystemHeader />
-      <main className="mx-3 mt-6 rounded-lg border bg-card/60 p-5 shadow-card sm:p-6">
+      <main className="mx-auto mt-6 max-w-[1600px] px-4 sm:px-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div className="min-w-0">
-            <p className="text-overline text-muted-foreground">Recrutamento e Seleção</p>
+            <p className="text-overline text-muted-foreground">Recrutamento e Seleção · Dados demonstrativos</p>
             <h1 className="text-dash-title mt-1">Painel de indicadores</h1>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <button className="flex items-center gap-2 rounded-md border bg-card px-3 py-2 text-xs text-muted-foreground">
-              <CalendarRange className="h-4 w-4" /> Últimos 6 meses
-            </button>
-            <button className="flex items-center gap-2 rounded-md bg-success px-3 py-2 text-xs font-bold uppercase text-brand-foreground">
-              <FileText className="h-4 w-4" /> Relatórios
-            </button>
-            <button className="flex items-center gap-2 rounded-md bg-muted-foreground px-3 py-2 text-xs font-bold uppercase text-brand-foreground">
-              <Filter className="h-4 w-4" /> Filtrar
-            </button>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <CalendarRange className="h-4 w-4" /> Maio – Outubro de 2026
           </div>
         </div>
 
-        {pendingSummary() !== "" && (
+        {summary !== "" && (
           <div className="mt-5">
             <AlertBanner
               icon={Inbox}
-              action={<button onClick={() => setActive(pendingCounts.vagas > 0 ? "vagas" : "empresas")} className="shrink-0 rounded-md bg-warning px-3 py-1.5 text-xs font-bold uppercase text-brand-foreground">Ver aprovações</button>}
+              action={<Button size="sm" variant="outline" onClick={() => document.getElementById("aprovacoes")?.scrollIntoView({ behavior: "smooth", block: "center" })}>Ver aprovações</Button>}
             >
-              Você tem <strong>{pendingSummary()}</strong> aguardando aprovação.
+              <span>Você tem <strong>{summary}</strong> aguardando aprovação.</span>
             </AlertBanner>
           </div>
         )}
@@ -65,21 +61,24 @@ function Index() {
           {tabs.map((t) => {
             const on = t.id === active;
             return (
-              <button
+              <Button
+                variant="ghost"
                 key={t.id}
                 role="tab"
                 aria-selected={on}
+                id={`tab-${t.id}`}
+                aria-controls="dashboard-content"
                 onClick={() => setActive(t.id)}
-                className={`-mb-px flex shrink-0 items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium transition-colors ${on ? "border-brand text-brand" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+                className={`-mb-px h-12 shrink-0 rounded-none border-b-2 px-4 text-sm font-medium ${on ? "border-brand text-brand" : "border-transparent text-muted-foreground hover:text-foreground"}`}
               >
                 <t.icon className="h-4 w-4" /> {t.label}
-              </button>
+              </Button>
             );
           })}
         </div>
 
-        <div className="mt-6" key={active}>
-          <div className="animate-in fade-in slide-in-from-bottom-1 duration-300">
+        <div className="mt-6" key={active} id="dashboard-content" role="tabpanel" aria-labelledby={`tab-${active}`}>
+          <div className="motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-1 duration-300">
             <Current />
           </div>
         </div>
