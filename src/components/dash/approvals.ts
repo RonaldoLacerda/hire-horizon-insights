@@ -1,5 +1,4 @@
-// Fonte única de "aguardando aprovação" para o painel.
-// Em produção, viria das APIs de vagas e de empresas.
+// Pendências demonstrativas; não representam solicitações reais.
 export type PendingApproval = {
   id: string;
   kind: "vaga" | "empresa";
@@ -9,8 +8,9 @@ export type PendingApproval = {
 };
 
 export const pendingApprovals: PendingApproval[] = [
-
-
+  { id: "vaga-1", kind: "vaga", name: "Auxiliar Administrativo", org: "Banco Horizonte", sentAt: "22/10/2026" },
+  { id: "vaga-2", kind: "vaga", name: "Estoquista", org: "Varejo Bom Preço", sentAt: "21/10/2026" },
+  { id: "empresa-1", kind: "empresa", name: "Clínica Vida Plena", org: "Saúde", sentAt: "22/10/2026" },
 ];
 
 export const pendingCounts = {
@@ -19,16 +19,22 @@ export const pendingCounts = {
   total: pendingApprovals.length,
 };
 
-// Frase do aviso: vazio quando não há nada pendente (aí o aviso some).
-export function pendingSummary(): string {
+export function pendingSummary(items: PendingApproval[] = pendingApprovals): string {
+  const vagas = items.filter((p) => p.kind === "vaga").length;
+  const empresas = items.filter((p) => p.kind === "empresa").length;
   const parts: string[] = [];
-  if (pendingCounts.vagas > 0) {
-    parts.push(`${pendingCounts.vagas} ${pendingCounts.vagas === 1 ? "vaga" : "vagas"} de empresa parceira`);
+  if (vagas > 0) {
+    parts.push(`${vagas} ${vagas === 1 ? "vaga" : "vagas"} de empresa parceira`);
   }
-  if (pendingCounts.empresas > 0) {
+  if (empresas > 0) {
     parts.push(
-      `${pendingCounts.empresas} ${pendingCounts.empresas === 1 ? "empresa parceira" : "empresas parceiras"}`,
+      `${empresas} ${empresas === 1 ? "empresa parceira" : "empresas parceiras"}`,
     );
   }
   return parts.join(" e ");
+}
+
+export function approvalsForTab(tab: string, items: PendingApproval[] = pendingApprovals) {
+  const kind = tab === "vagas" ? "vaga" : tab === "empresas" ? "empresa" : undefined;
+  return kind ? items.filter((item) => item.kind === kind) : [];
 }
