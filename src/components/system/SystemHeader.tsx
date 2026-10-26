@@ -28,14 +28,14 @@ export function SystemHeader() {
             <Users className="h-4 w-4" />
           </div>
         </div>
-        <button className="absolute left-1/2 top-0 flex -translate-x-1/2 items-center gap-1 rounded-b bg-brand px-4 py-1 text-[10px] font-bold text-brand-foreground">
+        <button className="flex items-center gap-1 rounded-b bg-brand px-4 py-1 text-[10px] font-bold text-brand-foreground sm:absolute sm:left-1/2 sm:top-0 sm:-translate-x-1/2">
           MATRIZ <ChevronDown className="h-3 w-3" />
         </button>
         <a className="hidden items-center gap-1 text-sm text-muted-foreground sm:flex">
           Ir p/ tela da API de Vagas <ArrowRight className="h-4 w-4" />
         </a>
       </div>
-      <nav className="flex items-center gap-1 overflow-x-auto rounded bg-brand px-3 py-3 text-brand-foreground">
+      <nav className="scrollbar-none flex items-center gap-1 overflow-x-auto rounded bg-brand px-3 py-3 text-brand-foreground">
         {items.map((it) => (
           <button
             key={it.label}

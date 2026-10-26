@@ -49,7 +49,7 @@ function Index() {
           </div>
           <div className="flex flex-wrap items-center gap-5 text-xs text-muted-foreground">
             <span className="flex items-center gap-2"><CalendarRange className="h-4 w-4" /> Maio – Outubro de 2026</span>
-            <label htmlFor="dark-mode" className="flex cursor-pointer items-center gap-2 border-l pl-5">
+            <label htmlFor="dark-mode" className="flex cursor-pointer items-center gap-2 sm:border-l sm:pl-5">
               <Moon className="h-4 w-4" /> Visão escura
               <Switch id="dark-mode" checked={dark} onCheckedChange={setDark} />
             </label>
@@ -79,7 +79,7 @@ function Index() {
                 id={`tab-${t.id}`}
                 aria-controls="dashboard-content"
                 onClick={() => setActive(t.id)}
-                className={`-mb-px h-12 rounded-none border-b-2 px-4 text-sm font-medium ${on ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+                className={`-mb-px h-12 flex-1 rounded-none border-b-2 px-2 text-sm font-medium sm:flex-none sm:px-4 ${on ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
               >
                 <t.icon className="h-4 w-4" /> {t.label}
               </Button>
