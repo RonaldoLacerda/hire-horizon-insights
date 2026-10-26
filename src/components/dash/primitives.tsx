@@ -62,7 +62,7 @@ export function ChartCard({
   title, subtitle, children, className = "", action,
 }: { title: string; subtitle?: string; children: ReactNode; className?: string; action?: ReactNode }) {
   return (
-    <section className={`flex flex-col rounded-lg border bg-card p-5 shadow-card ${className}`}>
+    <section className={`flex flex-col rounded-lg border bg-card p-4 shadow-card sm:p-5 ${className}`}>
       <div className="mb-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="text-card-title">{title}</h3>
@@ -94,7 +94,7 @@ export function StatusBadge({ status }: { status: string }) {
 
 export function InsightList({ items }: { items: string[] }) {
   return (
-    <section className="rounded-lg border border-info/20 bg-info-soft p-5">
+    <section className="rounded-lg border border-info/20 bg-info-soft p-4 sm:p-5">
       <div className="mb-3 flex items-center gap-2 text-info">
         <Lightbulb className="h-4 w-4" />
         <h3 className="text-card-title">Insights automáticos</h3>

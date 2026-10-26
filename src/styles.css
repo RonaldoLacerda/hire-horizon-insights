@@ -162,6 +162,13 @@
   box-shadow: var(--shadow-card);
 }
 
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Typography scale for dashboards */
 @utility text-dash-title {
   font-size: 1.25rem;
