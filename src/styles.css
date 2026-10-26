@@ -60,7 +60,7 @@
 
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.935 0.005 255);
+  --background: #faf9fd;
   --foreground: oklch(0.27 0.02 260);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.27 0.02 260);
@@ -93,7 +93,7 @@
   --ring: oklch(0.45 0.15 35);
   /* Refined data palette echoing the legacy charts (green, blue, amber, rose) — softer, harmonious. */
   --chart-1: oklch(0.66 0.12 150);
-  --chart-2: oklch(0.63 0.12 250);
+  --chart-2: #4b8dcf;
   --chart-3: oklch(0.77 0.13 80);
   --chart-4: oklch(0.66 0.14 8);
   --chart-5: oklch(0.66 0.09 195);
