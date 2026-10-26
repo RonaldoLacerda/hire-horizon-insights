@@ -79,7 +79,7 @@ function Index() {
                 id={`tab-${t.id}`}
                 aria-controls="dashboard-content"
                 onClick={() => setActive(t.id)}
-                className={`-mb-px h-12 shrink-0 rounded-none border-b-2 px-4 text-sm font-medium ${on ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
+                className={`-mb-px h-12 rounded-none border-b-2 px-4 text-sm font-medium ${on ? "border-primary text-primary" : "border-transparent text-muted-foreground hover:text-foreground"}`}
               >
                 <t.icon className="h-4 w-4" /> {t.label}
               </Button>
