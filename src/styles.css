@@ -91,13 +91,13 @@
   --border: oklch(0.92 0.006 260);
   --input: oklch(0.9 0.006 260);
   --ring: oklch(0.45 0.15 35);
-  /* Independent, restrained data palette: teal, blue, sage, ochre, lavender, gray. */
-  --chart-1: oklch(0.61 0.075 185);
-  --chart-2: oklch(0.64 0.085 245);
-  --chart-3: oklch(0.67 0.075 145);
-  --chart-4: oklch(0.74 0.09 85);
-  --chart-5: oklch(0.66 0.065 300);
-  --chart-6: oklch(0.7 0.025 250);
+  /* Refined data palette echoing the legacy charts (green, blue, amber, rose) — softer, harmonious. */
+  --chart-1: oklch(0.66 0.12 150);
+  --chart-2: oklch(0.63 0.12 250);
+  --chart-3: oklch(0.77 0.13 80);
+  --chart-4: oklch(0.66 0.14 8);
+  --chart-5: oklch(0.66 0.09 195);
+  --chart-6: oklch(0.64 0.10 295);
   --shadow-card: 0 1px 2px oklch(0.3 0.02 260 / 6%), 0 4px 14px -6px oklch(0.3 0.02 260 / 10%);
   --sidebar: oklch(0.984 0.003 247.858);
   --sidebar-foreground: oklch(0.129 0.042 264.695);
@@ -138,12 +138,12 @@
   --border: oklch(0.37 0.01 255);
   --input: oklch(0.42 0.012 255);
   --ring: var(--primary);
-  --chart-1: oklch(0.74 0.08 185);
-  --chart-2: oklch(0.74 0.085 245);
-  --chart-3: oklch(0.76 0.075 145);
-  --chart-4: oklch(0.8 0.09 85);
-  --chart-5: oklch(0.76 0.065 300);
-  --chart-6: oklch(0.72 0.025 250);
+  --chart-1: oklch(0.76 0.11 150);
+  --chart-2: oklch(0.74 0.11 250);
+  --chart-3: oklch(0.82 0.12 80);
+  --chart-4: oklch(0.74 0.12 8);
+  --chart-5: oklch(0.76 0.08 195);
+  --chart-6: oklch(0.74 0.09 295);
   --shadow-card: 0 1px 3px oklch(0.1 0 0 / 15%);
 }
 
