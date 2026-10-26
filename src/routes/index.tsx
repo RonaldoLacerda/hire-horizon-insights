@@ -67,7 +67,7 @@ function Index() {
           </div>
         )}
 
-        <div role="tablist" className="mt-5 flex gap-1 overflow-x-auto border-b">
+        <div role="tablist" className="mt-5 flex flex-wrap gap-1 border-b">
           {tabs.map((t) => {
             const on = t.id === active;
             return (
