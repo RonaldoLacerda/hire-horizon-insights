@@ -14,3 +14,4 @@
 - Compose the four dashboard tabs with shared chart and KPI primitives; client-priority distributions precede legacy operational analysis.
 - Keep approval visibility in the pure `approvalsForTab` helper and cover empty and tab-specific behavior with unit tests.
 - This dashboard is a frontend prototype with explicitly labeled fictional data, not a live reporting or approval service.
+- Apply dashboard light/dark modes through semantic CSS variables and a document-level class toggled after hydration; keep the system header's brand colors independent of the data palette.
