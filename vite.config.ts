@@ -1,24 +1,57 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
-//     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
-//     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import tailwindcss from "@tailwindcss/vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import react from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 const isGitHubPagesBuild = process.env.GITHUB_PAGES === "true";
 
-export default defineConfig({
-  vite: {
-    base: isGitHubPagesBuild ? "/hire-horizon-insights/" : "/",
-    // Prebundle hook-based controls with React before navigation/HMR loads them.
-    // Late optimization can otherwise leave controls and the renderer on different React instances.
-    optimizeDeps: { include: ["react", "react-dom/client", "recharts", "lucide-react", "@radix-ui/react-switch", "@radix-ui/react-slot"] },
+export default defineConfig((env) => ({
+  base: isGitHubPagesBuild ? "/hire-horizon-insights/" : "/",
+  plugins: [
+    tailwindcss(),
+    tsconfigPaths({ projects: ["./tsconfig.json"] }),
+    tanstackStart({
+      importProtection: {
+        behavior: "error",
+        client: {
+          files: ["**/server/**"],
+          specifiers: ["server-only"],
+        },
+      },
+      server: { entry: "server" },
+      prerender: { enabled: isGitHubPagesBuild },
+    }),
+    ...(!isGitHubPagesBuild ? [nitro({ defaultPreset: "cloudflare-module" })] : []),
+    react(),
+  ],
+  resolve: {
+    alias: { "@": `${process.cwd()}/src` },
+    dedupe: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "@tanstack/react-query",
+      "@tanstack/query-core",
+    ],
   },
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
-    prerender: { enabled: isGitHubPagesBuild },
+  optimizeDeps: {
+    include: [
+      "react",
+      "react-dom",
+      "react-dom/client",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "recharts",
+      "lucide-react",
+      "@radix-ui/react-switch",
+      "@radix-ui/react-slot",
+    ],
+    ignoreOutdatedRequests: true,
   },
-});
+  ...(env.isPreview && process.env.TSS_PRERENDERING === "true"
+    ? { preview: { host: "127.0.0.1", port: 0 } }
+    : {}),
+}));
