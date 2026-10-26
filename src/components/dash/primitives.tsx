@@ -23,7 +23,7 @@ export const tooltipProps = {
 
 type Tone = "brand" | "success" | "info" | "warning" | "danger";
 const toneCls: Record<Tone, string> = {
-  brand: "bg-accent text-brand",
+  brand: "bg-accent text-accent-foreground",
   success: "bg-success-soft text-success",
   info: "bg-info-soft text-info",
   warning: "bg-warning-soft text-warning",
@@ -94,14 +94,14 @@ export function StatusBadge({ status }: { status: string }) {
 
 export function InsightList({ items }: { items: string[] }) {
   return (
-    <section className="rounded-lg border border-brand/20 bg-accent p-5">
-      <div className="mb-3 flex items-center gap-2 text-brand">
+    <section className="rounded-lg border border-info/20 bg-info-soft p-5">
+      <div className="mb-3 flex items-center gap-2 text-info">
         <Lightbulb className="h-4 w-4" />
         <h3 className="text-card-title">Insights automáticos</h3>
       </div>
       <ul className="space-y-2 text-sm text-foreground/85">
         {items.map((t) => (
-          <li key={t} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />{t}</li>
+          <li key={t} className="flex gap-2"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-info" />{t}</li>
         ))}
       </ul>
     </section>
@@ -143,7 +143,7 @@ export function RankTable({ rows, valueLabel }: { rows: { name: string; value: n
               <span className="font-medium tabular-nums">{r.value}</span>
             </div>
             <div className="mt-1.5 h-1.5 rounded-full bg-muted">
-              <div className="h-full rounded-full bg-brand" style={{ width: `${(r.value / max) * 100}%` }} />
+              <div className="h-full rounded-full bg-chart-1" style={{ width: `${(r.value / max) * 100}%` }} />
             </div>
           </li>
         ))}
