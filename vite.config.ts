@@ -6,8 +6,11 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+const isGitHubPagesBuild = process.env.GITHUB_PAGES === "true";
+
 export default defineConfig({
   vite: {
+    base: isGitHubPagesBuild ? "/hire-horizon-insights/" : "/",
     // Prebundle hook-based controls with React before navigation/HMR loads them.
     // Late optimization can otherwise leave controls and the renderer on different React instances.
     optimizeDeps: { include: ["react", "react-dom/client", "recharts", "lucide-react", "@radix-ui/react-switch", "@radix-ui/react-slot"] },
@@ -16,5 +19,6 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    prerender: { enabled: isGitHubPagesBuild },
   },
 });
