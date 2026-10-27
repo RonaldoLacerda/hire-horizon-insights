@@ -72,7 +72,7 @@ export function VagasTab() {
   return <div className="space-y-5">
     <div className={kpis}>
       <KpiCard label="Vagas ativas" value="214" delta={4.1} icon={BriefcaseBusiness} tone="info" />
-      <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} />
+      <KpiCard label="SLA médio geral das vagas" value="21 dias" icon={Clock} tone="info" hint="198 dentro do prazo · 16 fora" />
       <KpiCard label="Vagas fechadas" value="7" icon={CheckCircle2} tone="success" hint="situação atual" />
       <KpiCard label="Vagas aguardando aprovação" value={String(pendingCounts.vagas)} icon={Hourglass} tone="warning" />
     </div>
@@ -136,7 +136,7 @@ export function ProcessosTab() {
     <div className={kpis}>
       <KpiCard label="Processos em andamento" value="86" delta={5.3} icon={Timer} />
       <KpiCard label="Contratados" value="105" delta={19} icon={UserCheck} tone="success" hint="últimos 6 meses" />
-      <KpiCard label="SLA médio geral das vagas" value="21 dias" icon={Clock} tone="info" hint="198 dentro do prazo · 16 fora" />
+      <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} />
       <KpiCard label="Candidatos dentro do prazo" value="86,1%" icon={Clock} tone="warning" hint="267 de 310 candidatos em seleção" />
     </div>
     <div className="flex flex-wrap gap-2 border-b pb-3" role="tablist" aria-label="Análises de processos">
