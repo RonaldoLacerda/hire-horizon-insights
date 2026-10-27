@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Users, UserCheck, GraduationCap, MapPin, BriefcaseBusiness, Clock, XCircle, Building2, Accessibility, Send, Hourglass, FileText, Timer, Target, CheckCircle2 } from "lucide-react";
+import { Users, UserCheck, GraduationCap, BriefcaseBusiness, Clock, XCircle, Building2, Accessibility, Send, Hourglass, FileText, Timer, Target, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { KpiCard, ChartCard, InsightList, RankTable, StatusBadge } from "./primitives";
 import { DistributionChart, TimelineChart, SectionHeading } from "./charts";
 import { pendingApprovals, pendingCounts } from "./approvals";
-import { months, escolaridade, escolaridadeVagas, bairros, origem, faixa, situacao, areas, topEmpresas, vagasRecentes, recrutadores } from "./data";
+import { months, escolaridade, escolaridadeVagas, gruposCandidatos, vagasPorSla, contratadosPorTipo, bairros, origem, faixa, situacao, areas, topEmpresas, vagasRecentes, recrutadores } from "./data";
 
 const grid = "grid gap-5 lg:grid-cols-2 xl:grid-cols-3";
 const kpis = "grid gap-4 sm:grid-cols-2 xl:grid-cols-4";
@@ -41,14 +41,14 @@ export function CandidatosTab() {
   return <div className="space-y-5">
     <div className={kpis}>
       <KpiCard label="Candidatos cadastrados" value="773" delta={13.5} icon={Users} />
-      <KpiCard label="Bairro com mais candidatos" value="Centro" icon={MapPin} tone="success" hint="148 candidatos · 19,1% da base" />
+      <KpiCard label="Total de candidatos contratados" value="105" delta={19} icon={UserCheck} tone="success" hint="últimos 6 meses" />
       <KpiCard label="Pessoas com deficiência" value="52" icon={Accessibility} tone="info" hint="6,7% da base cadastrada" />
       <KpiCard label="Jovem Aprendiz" value="180" icon={GraduationCap} tone="warning" hint="candidatos interessados" />
     </div>
     <SectionHeading title="Perfil dos candidatos" note="Base cadastrada" />
     <div className={grid}>
       <DistributionChart title="Escolaridade dos candidatos" data={escolaridade} donut />
-      <DistributionChart title="Escolaridade mínima exigida pelas vagas" data={escolaridadeVagas} />
+      <DistributionChart title="Candidatos por grupo" subtitle="773 candidatos cadastrados" data={gruposCandidatos} />
       <DistributionChart title="Faixa etária" data={faixa} />
       <ChartCard title="Bairros dos candidatos" subtitle="8 maiores concentrações"><RankTable rows={bairros} valueLabel="Candidatos" /></ChartCard>
       <DistributionChart title="Área de interesse dos candidatos" subtitle="Interesse principal informado" data={[{ name: "Administrativo", value: 220 }, { name: "Comercial", value: 175 }, { name: "TI", value: 138 }, { name: "Operações", value: 110 }, { name: "Financeiro", value: 80 }, { name: "Outras", value: 50 }]} />
@@ -81,7 +81,7 @@ export function VagasTab() {
       <DistributionChart title="Vagas por status" data={situacao} donut />
       <DistributionChart title="Vagas por área" data={areas} />
       <DistributionChart title="Vagas por modalidade" data={[{ name: "Presencial", value: 168 }, { name: "Híbrido", value: 58 }, { name: "Remoto", value: 29 }]} donut />
-      <DistributionChart title="Vagas por origem" data={[{ name: "Equipe interna", value: 181 }, { name: "Empresas parceiras", value: 74 }]} donut />
+      <DistributionChart title="Vagas por origem" data={[{ name: "Criada pelo adm", value: 181 }, { name: "Solicitação via api", value: 74 }]} donut />
       <DistributionChart title="Vagas por faixa salarial" data={[{ name: "Até R$ 1.500", value: 35 }, { name: "R$ 1.501–2.500", value: 98 }, { name: "R$ 2.501–4.000", value: 72 }, { name: "Acima de R$ 4.000", value: 30 }, { name: "A combinar", value: 20 }]} />
       <DistributionChart title="Escolaridade mínima exigida" data={escolaridadeVagas} />
     </div>
@@ -136,7 +136,7 @@ export function ProcessosTab() {
     <div className={kpis}>
       <KpiCard label="Processos em andamento" value="86" delta={5.3} icon={Timer} />
       <KpiCard label="Contratados" value="105" delta={19} icon={UserCheck} tone="success" hint="últimos 6 meses" />
-      <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} tone="info" hint="últimos 6 meses" />
+      <KpiCard label="SLA médio geral das vagas" value="21 dias" icon={Clock} tone="info" hint="198 dentro do prazo · 16 fora" />
       <KpiCard label="Candidatos dentro do prazo" value="86,1%" icon={Clock} tone="warning" hint="267 de 310 candidatos em seleção" />
     </div>
     <div className="flex flex-wrap gap-2 border-b pb-3" role="tablist" aria-label="Análises de processos">
@@ -147,11 +147,12 @@ export function ProcessosTab() {
       <SectionHeading title="Situação dos candidatos nos processos" note="Movimentações no período" />
       <div className={grid}>
         <DistributionChart title="Movimentação nos processos seletivos" data={[{ name: "Incluídos", value: 1240 }, { name: "Removidos", value: 186 }, { name: "Contratados", value: 105 }, { name: "Desligados", value: 12 }]} />
-        <DistributionChart title="Candidatos dentro e fora do prazo" subtitle="Candidatos em seleção" data={[{ name: "Dentro do prazo", value: 267 }, { name: "Fora do prazo", value: 43 }]} donut />
+        <DistributionChart title="Vagas dentro e fora do SLA" subtitle="214 vagas ativas" data={vagasPorSla} donut />
         <DistributionChart title="Motivos de incompatibilidade" subtitle="Distribuição das reprovações (%)" data={[{ name: "Perfil técnico", value: 38 }, { name: "Desistência", value: 24 }, { name: "Pretensão salarial", value: 18 }, { name: "Não compareceu", value: 20 }]} />
       </div>
       <div className="grid gap-5 lg:grid-cols-2">
         <DistributionChart title="Tempo médio por etapa" subtitle="Dias" data={[{ name: "Triagem", value: 3 }, { name: "Entrevista", value: 6 }, { name: "Teste", value: 4 }, { name: "Proposta", value: 5 }, { name: "Admissão", value: 3 }]} />
+        <DistributionChart title="Contratados por tipo de vaga" subtitle="Total de 105 contratações · últimos 6 meses" data={contratadosPorTipo} donut />
         <ChartCard title="Ranking de contratações" subtitle="Recrutadores e consultores"><RankTable rows={recrutadores.map((r) => ({ name: r.name, value: r.contratados }))} valueLabel="Contratados" /></ChartCard>
       </div>
       <ChartCard title="Desempenho por recrutador / consultor" subtitle="Últimos 6 meses"><div className="overflow-x-auto"><table className="w-full min-w-[820px] text-sm">
