@@ -24,11 +24,11 @@ export function pendingSummary(items: PendingApproval[] = pendingApprovals): str
   const empresas = items.filter((p) => p.kind === "empresa").length;
   const parts: string[] = [];
   if (vagas > 0) {
-    parts.push(`${vagas} ${vagas === 1 ? "vaga" : "vagas"} de empresa parceira`);
+    parts.push(`${vagas} ${vagas === 1 ? "vaga" : "vagas"}`);
   }
   if (empresas > 0) {
     parts.push(
-      `${empresas} ${empresas === 1 ? "empresa parceira" : "empresas parceiras"}`,
+      `${empresas} ${empresas === 1 ? "empresa" : "empresas"}`,
     );
   }
   return parts.join(" e ");

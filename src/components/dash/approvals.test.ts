@@ -10,9 +10,11 @@ describe("Visibilidade de aprovações", () => {
   });
   it("exibe somente as duas vagas pendentes em Vagas", () => {
     expect(approvalsForTab("vagas").map((item) => item.id)).toEqual(["vaga-1", "vaga-2"]);
+    expect(pendingSummary(approvalsForTab("vagas"))).toBe("2 vagas");
   });
   it("exibe somente a empresa pendente em Empresas", () => {
     expect(approvalsForTab("empresas").map((item) => item.id)).toEqual(["empresa-1"]);
+    expect(pendingSummary(approvalsForTab("empresas"))).toBe("1 empresa");
   });
   it("não produz aviso quando não existem pendências", () => {
     expect(pendingSummary(approvalsForTab("vagas", []))).toBe("");

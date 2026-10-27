@@ -8,8 +8,10 @@ describe("Indicadores demonstrativos", () => {
     expect(gruposCandidatos.map(({ name }) => name)).toEqual([
       "Padrão",
       "Estagiário",
-      "Jovem Aprendiz PCD",
+      "Jovem Aprendiz",
+      "PCD",
     ]);
+    expect(gruposCandidatos.map(({ value }) => value)).toEqual([521, 180, 20, 52]);
     expect(total(gruposCandidatos)).toBe(773);
   });
 

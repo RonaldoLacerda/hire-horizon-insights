@@ -2,7 +2,7 @@
 export const months = ["Mai", "Jun", "Jul", "Ago", "Set", "Out"];
 export const escolaridade = [{ name: "Superior", value: 312 }, { name: "Ensino médio", value: 248 }, { name: "Técnico", value: 158 }, { name: "Pós-graduação", value: 55 }];
 export const escolaridadeVagas = [{ name: "Ensino médio", value: 102 }, { name: "Superior", value: 74 }, { name: "Técnico", value: 55 }, { name: "Fundamental", value: 24 }];
-export const gruposCandidatos = [{ name: "Padrão", value: 521 }, { name: "Estagiário", value: 180 }, { name: "Jovem Aprendiz PCD", value: 72 }];
+export const gruposCandidatos = [{ name: "Padrão", value: 521 }, { name: "Estagiário", value: 180 }, { name: "Jovem Aprendiz", value: 20 }, { name: "PCD", value: 52 }];
 export const vagasPorSla = [{ name: "Dentro do prazo", value: 198 }, { name: "Fora do prazo", value: 16 }];
 export const contratadosPorTipo = [{ name: "CLT", value: 61 }, { name: "PJ", value: 14 }, { name: "Estágio", value: 20 }, { name: "Jovem Aprendiz", value: 10 }];
 export const bairros = [{ name: "Centro", value: 148 }, { name: "Jardim América", value: 112 }, { name: "Vila Nova", value: 96 }, { name: "Santa Maria", value: 84 }, { name: "São José", value: 73 }, { name: "Boa Vista", value: 64 }, { name: "Industrial", value: 51 }, { name: "Jardim Canadá", value: 45 }];

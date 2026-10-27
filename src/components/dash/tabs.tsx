@@ -74,7 +74,7 @@ export function VagasTab() {
       <KpiCard label="Vagas ativas" value="214" delta={4.1} icon={BriefcaseBusiness} tone="info" />
       <KpiCard label="Candidaturas totais" value="1.240" delta={18} icon={FileText} />
       <KpiCard label="Vagas fechadas" value="7" icon={CheckCircle2} tone="success" hint="situação atual" />
-      <KpiCard label="Vagas aguardando aprovação" value={String(pendingCounts.vagas)} icon={Hourglass} tone="warning" hint="enviadas por empresas parceiras" />
+      <KpiCard label="Vagas aguardando aprovação" value={String(pendingCounts.vagas)} icon={Hourglass} tone="warning" />
     </div>
     <SectionHeading title="Distribuição das vagas" note="255 vagas cadastradas" />
     <div className={grid}>
