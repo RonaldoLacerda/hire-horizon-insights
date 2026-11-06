@@ -1,6 +1,32 @@
 import type { LucideIcon } from "lucide-react";
-import { TrendingUp, TrendingDown, Lightbulb } from "lucide-react";
+import { TrendingUp, TrendingDown, Lightbulb, Info, FlaskConical } from "lucide-react";
 import type { ReactNode } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+
+// Explica o indicador: o que mostra, de onde vem o dado e, quando houver, ressalvas do cálculo.
+export type ChartInfo = { about: string; source: string; note?: string };
+
+export function InfoButton({ title, info }: { title: string; info: ChartInfo }) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button type="button" aria-label={`Sobre o indicador: ${title}`} className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <Info className="h-4 w-4" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="w-80 max-w-[calc(100vw-2rem)] space-y-3 text-sm">
+        <p className="text-card-title">{title}</p>
+        <div><p className="text-overline text-muted-foreground">O que mostra</p><p className="mt-1">{info.about}</p></div>
+        <div><p className="text-overline text-muted-foreground">Origem e cálculo</p><p className="mt-1 text-muted-foreground">{info.source}</p></div>
+        {info.note && <div className="rounded-md bg-warning-soft p-2.5 text-xs text-foreground"><p className="mb-1 font-semibold text-warning">Em análise</p>{info.note}</div>}
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+export function AnalysisTag() {
+  return <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-warning-soft px-2 py-0.5 text-[11px] font-semibold text-warning"><FlaskConical className="h-3 w-3" />Em análise</span>;
+}
 
 export const C = {
   c1: "var(--chart-1)", c2: "var(--chart-2)", c3: "var(--chart-3)",
@@ -31,14 +57,18 @@ const toneCls: Record<Tone, string> = {
 };
 
 export function KpiCard({
-  label, value, delta, icon: Icon, tone = "brand", hint,
-}: { label: string; value: string; delta?: number; icon: LucideIcon; tone?: Tone; hint?: string }) {
+  label, value, delta, icon: Icon, tone = "brand", hint, info, analysis = false,
+}: { label: string; value: string; delta?: number; icon: LucideIcon; tone?: Tone; hint?: string; info?: ChartInfo; analysis?: boolean }) {
   const up = (delta ?? 0) >= 0;
   return (
     <div className="rounded-lg border bg-card p-4 shadow-card">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-overline truncate text-muted-foreground">{label}</p>
+          {analysis && <div className="mb-2"><AnalysisTag /></div>}
+          <div className="flex items-center gap-1">
+            <p className="text-overline truncate text-muted-foreground">{label}</p>
+            {info && <InfoButton title={label} info={info} />}
+          </div>
           <p className="text-kpi mt-2">{value}</p>
         </div>
         <div className={`grid h-9 w-9 shrink-0 place-items-center rounded-md ${toneCls[tone]}`}>
@@ -59,16 +89,16 @@ export function KpiCard({
 }
 
 export function ChartCard({
-  title, subtitle, children, className = "", action,
-}: { title: string; subtitle?: string; children: ReactNode; className?: string; action?: ReactNode }) {
+  title, subtitle, children, className = "", action, info, analysis = false,
+}: { title: string; subtitle?: string; children: ReactNode; className?: string; action?: ReactNode; info?: ChartInfo; analysis?: boolean }) {
   return (
     <section className={`flex flex-col rounded-lg border bg-card p-4 shadow-card sm:p-5 ${className}`}>
       <div className="mb-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="text-card-title">{title}</h3>
+          <div className="flex flex-wrap items-center gap-2"><h3 className="text-card-title">{title}</h3>{analysis && <AnalysisTag />}</div>
           {subtitle && <p className="mt-0.5 text-xs text-muted-foreground">{subtitle}</p>}
         </div>
-        {action}
+        <div className="flex shrink-0 items-center gap-2">{action}{info && <InfoButton title={title} info={info} />}</div>
       </div>
       <div className="flex-1">{children}</div>
     </section>

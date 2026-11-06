@@ -24,4 +24,20 @@ export const recrutadores = [
   { name: "Mariana Lima", triados: 128, selecao: 63, contratados: 19, provas: 31, dentro: 54, fora: 9 },
   { name: "Pedro Santos", triados: 96, selecao: 48, contratados: 14, provas: 24, dentro: 40, fora: 8 },
   { name: "Juliana Alves", triados: 80, selecao: 33, contratados: 11, provas: 17, dentro: 26, fora: 7 },
+];// Contratados nos últimos 6 meses (105) pelo perfil do cadastro.
+export const contratadosGenero = [{ name: "Feminino", value: 58 }, { name: "Masculino", value: 45 }, { name: "Não informado", value: 2 }];
+export const contratadosRaca = [{ name: "Parda", value: 44 }, { name: "Branca", value: 38 }, { name: "Preta", value: 16 }, { name: "Amarela", value: 3 }, { name: "Indígena", value: 1 }, { name: "Não declarada", value: 3 }];
+export const contratadosFaixa = [{ name: "16–18 anos", value: 9 }, { name: "19–21 anos", value: 27 }, { name: "22–25 anos", value: 33 }, { name: "26–30 anos", value: 20 }, { name: "31–40 anos", value: 11 }, { name: "41+ anos", value: 5 }];
+export const contratadosPcd = [{ name: "Sem deficiência", value: 97 }, { name: "Pessoas com deficiência", value: 8 }];
+// Área de interesse dos 773 candidatos e área das 214 vagas abertas.
+export const interesseVsVagas = [
+  { name: "Administrativo", candidatos: 220, vagas: 40 },
+  { name: "Comercial", candidatos: 175, vagas: 52 },
+  { name: "TI", candidatos: 138, vagas: 45 },
+  { name: "Operações", candidatos: 110, vagas: 38 },
+  { name: "Financeiro", candidatos: 80, vagas: 21 },
+  { name: "Marketing", candidatos: 30, vagas: 18 },
+  { name: "Outras", candidatos: 20, vagas: 0 },
 ];
+// Dias médios por mês: abertura da vaga até a 1ª contratação e entrada do candidato no processo até a contratação.
+export const tempoContratacao = months.map((m, i) => ({ m, vaga: [21, 20, 19, 19, 18, 17][i] ?? 0, candidato: [17, 16, 16, 15, 14, 12][i] ?? 0 }));
