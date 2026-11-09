@@ -2,7 +2,7 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend as ChartLegend, Line, LineCh
 import { useIsMobile } from "@/hooks/use-mobile";
 import { C, PALETTE, axisProps, tooltipProps, ChartCard, Legend, AnalysisTag, type ChartInfo } from "./primitives";
 
-export type Distribution = { name: string; value: number };
+export type Distribution = { name: string; value: number; color?: string };
 type CardProps = { title: string; subtitle?: string; info?: ChartInfo; analysis?: boolean; className?: string };
 
 export function DistributionChart({ data, donut = false, ...card }: CardProps & { data: Distribution[]; donut?: boolean }) {
@@ -11,10 +11,10 @@ export function DistributionChart({ data, donut = false, ...card }: CardProps & 
     {donut ? <div className="flex flex-wrap items-center justify-center gap-5">
       <div className="w-36 shrink-0"><ResponsiveContainer width="100%" height={160}><PieChart>
         <Pie data={data} dataKey="value" nameKey="name" innerRadius={48} outerRadius={70} paddingAngle={2} stroke="none" isAnimationActive={false}>
-          {data.map((item, index) => <Cell key={item.name} fill={PALETTE[index % PALETTE.length]} />)}
+          {data.map((item, index) => <Cell key={item.name} fill={item.color ?? PALETTE[index % PALETTE.length]} />)}
         </Pie><Tooltip {...tooltipProps} />
       </PieChart></ResponsiveContainer></div>
-      <div className="min-w-36 flex-1"><Legend items={data.map((item, index) => ({ ...item, color: PALETTE[index % PALETTE.length] }))} /></div>
+      <div className="min-w-36 flex-1"><Legend items={data.map((item, index) => ({ ...item, color: item.color ?? PALETTE[index % PALETTE.length] }))} /></div>
     </div> : <ResponsiveContainer width="100%" height={Math.max(220, data.length * 33)}><BarChart data={data} layout="vertical" margin={{ left: 0, right: 24 }}>
       <CartesianGrid stroke={C.grid} horizontal={false} /><XAxis type="number" {...axisProps} allowDecimals={false} />
       <YAxis type="category" dataKey="name" width={mobile ? 92 : 130} {...axisProps} /><Tooltip {...tooltipProps} />
