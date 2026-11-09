@@ -19,6 +19,8 @@ export const info = {
   situacaoCadastral: { about: "Candidatos ativos e inativos na base.", source: "Status atual do cadastro do candidato." },
   movimentacaoCadastral: { about: "Cadastros criados, atualizados e excluídos em cada mês.", source: "Datas de criação, última atualização e exclusão do cadastro do candidato." },
   // Vagas
+  vagasPreenchidas: { about: "Vagas que já tiveram pelo menos uma contratação.", source: "Vagas com ao menos um candidato na etapa de contratação do processo seletivo, seja qual for a situação atual da vaga." },
+  vagasExpiradas: { about: "Vagas que passaram do prazo sem nenhuma contratação.", source: "Vagas cuja data de previsão de encerramento já passou e que não têm nenhum candidato na etapa de contratação. Vagas sem previsão de encerramento não entram nesta conta." },
   vagasStatus: {
     about: "Vagas cadastradas pela situação atual, separando as que tiveram contratação (preenchidas) das que passaram do prazo sem nenhuma contratação (expiradas). Cada vaga aparece em uma única fatia.",
     source: "Regra aplicada nesta ordem: 1) Preenchidas: vaga com pelo menos um candidato na etapa de contratação, seja qual for a situação. 2) Expiradas sem preenchimento: data de previsão de encerramento já passou e nenhum candidato foi contratado, esteja a vaga aberta, fechada ou cancelada. 3) As demais seguem a situação cadastrada: aberta, prospecção, stand by, solicitando documentos, fechada (sem contratação) ou cancelada. Vaga sem previsão de encerramento nunca conta como expirada; por isso, \"Abertas\" aqui são só as que estão no prazo e sem contratação.",
