@@ -51,18 +51,15 @@ export const info = {
   desempenhoRecrutador: { about: "Produção de cada recrutador ou consultor no período.", source: "Candidatos triados, em seleção, contratados e provas aplicadas por responsável; prazo comparado com o SLA da vaga." },
   tempoPreencherVaga: {
     about: "Quantos dias, em média, uma vaga leva desde a abertura até a primeira contratação.",
-    source: "Para cada vaga com contratação no período: data da 1ª contratação − data de abertura da vaga. Média entre essas vagas.",
-    note: "Depende de as datas de abertura e de contratação estarem registradas de forma confiável. Vagas reabertas, em stand by ou com várias posições precisam de regra definida.",
+    source: "Para cada vaga com contratação no período: data da 1ª contratação − data de criação da vaga, em dias corridos. A 1ª contratação é a menor data de contratação entre os candidatos que chegaram à etapa de contratação. O indicador é a média entre essas vagas. Vagas sem contratação não entram na conta.",
   },
   tempoContratacaoCandidato: {
     about: "Quantos dias, em média, um candidato contratado levou desde a entrada no processo seletivo até a contratação.",
-    source: "Para cada candidato contratado no período: data da contratação − data de inclusão no processo da vaga. Média entre os contratados.",
-    note: "Exige o histórico das datas de inclusão e de mudança de status no processo. Se o candidato participou de vários processos, é preciso definir qual entrada conta.",
+    source: "Para cada candidato contratado no período: data da contratação − data em que foi incluído no processo seletivo da vaga, em dias corridos. O indicador é a média entre os contratados. Se o candidato foi contratado em mais de uma vaga, cada contratação conta separadamente.",
   },
   tempoContratacaoMes: {
     about: "Evolução mensal dos dois tempos médios: preenchimento da vaga (abertura até a 1ª contratação) e contratação do candidato (entrada no processo até a contratação).",
-    source: "Mesmo cálculo dos dois indicadores ao lado, agrupado pelo mês da contratação.",
-    note: "Indicador em avaliação: a viabilidade depende do histórico de datas disponível no sistema.",
+    source: "Mesmo cálculo dos dois indicadores ao lado, agrupado pelo mês da data de contratação.",
   },
   // Turnover
   turnoverMes: { about: "Taxa de turnover dos candidatos contratados em cada mês.", source: "((admissões + desligamentos) ÷ 2) ÷ total de vínculos ativos no fim do mês." },

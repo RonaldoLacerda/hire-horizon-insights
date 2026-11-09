@@ -167,13 +167,13 @@ export function ProcessosTab() {
         <thead><tr className="border-b text-left text-overline text-muted-foreground">{["Responsável", "Triados", "Em seleção", "Contratados", "Provas", "Dentro do prazo", "Fora do prazo"].map((h) => <th key={h} className="px-3 py-3 font-medium">{h}</th>)}</tr></thead>
         <tbody>{recrutadores.map((r) => <tr key={r.name} className="border-b last:border-0"><td className="px-3 py-3 font-medium">{r.name}</td>{[r.triados, r.selecao, r.contratados, r.provas, r.dentro, r.fora].map((v, i) => <td key={i} className={`px-3 py-3 tabular-nums ${i === 5 ? "text-danger" : "text-muted-foreground"}`}>{v}</td>)}</tr>)}</tbody>
       </table></div></ChartCard>
-      <SectionHeading title="Tempo até a contratação" note="Indicadores propostos · cálculo a validar" analysis />
+      <SectionHeading title="Tempo até a contratação" note="Contratações dos últimos 6 meses" />
       <div className="grid gap-5 lg:grid-cols-3">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-          <KpiCard label="Tempo médio para preencher uma vaga" value="19 dias" icon={Clock} tone="info" hint="abertura da vaga até a 1ª contratação" info={info.tempoPreencherVaga} analysis />
-          <KpiCard label="Tempo médio até a contratação" value="15 dias" icon={UserCheck} tone="success" hint="entrada no processo até a contratação" info={info.tempoContratacaoCandidato} analysis />
+          <KpiCard label="Tempo médio para preencher uma vaga" value="19 dias" icon={Clock} tone="info" hint="abertura da vaga até a 1ª contratação" info={info.tempoPreencherVaga} />
+          <KpiCard label="Tempo médio até a contratação" value="15 dias" icon={UserCheck} tone="success" hint="entrada no processo até a contratação" info={info.tempoContratacaoCandidato} />
         </div>
-        <TimelineChart className="lg:col-span-2" title="Tempo médio até a contratação por mês" subtitle="Dias · média de cada mês" info={info.tempoContratacaoMes} analysis data={tempoContratacao} series={[{ key: "vaga", name: "Preenchimento da vaga" }, { key: "candidato", name: "Contratação do candidato" }]} />
+        <TimelineChart className="lg:col-span-2" title="Tempo médio até a contratação por mês" subtitle="Dias · média de cada mês" info={info.tempoContratacaoMes} data={tempoContratacao} series={[{ key: "vaga", name: "Preenchimento da vaga" }, { key: "candidato", name: "Contratação do candidato" }]} />
       </div>
       <InsightList items={["43 candidatos em seleção estão fora do prazo: priorize a revisão destes processos.", "Entrevista é a etapa mais demorada, com média de 6 dias.", "Ana Martins lidera as contratações: 34 dos 105 contratados no período."]} />
     </> : <>
