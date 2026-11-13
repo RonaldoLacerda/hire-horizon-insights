@@ -10,33 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiVagasRouteImport } from './routes/api-vagas'
+import { Route as VagasRouteImport } from './routes/vagas'
+import { Route as ConfiguracoesApiVagasRouteImport } from './routes/configuracoes/api-vagas'
+import { Route as ConfiguracoesEditorV4RouteImport } from './routes/configuracoes/editor-v4'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiVagasRoute = ApiVagasRouteImport.update({
+  id: '/api-vagas',
+  path: '/api-vagas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VagasRoute = VagasRouteImport.update({
+  id: '/vagas',
+  path: '/vagas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracoesApiVagasRoute = ConfiguracoesApiVagasRouteImport.update({
+  id: '/configuracoes/api-vagas',
+  path: '/configuracoes/api-vagas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracoesEditorV4Route = ConfiguracoesEditorV4RouteImport.update({
+  id: '/configuracoes/editor-v4',
+  path: '/configuracoes/editor-v4',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api-vagas': typeof ApiVagasRoute
+  '/vagas': typeof VagasRoute
+  '/configuracoes/api-vagas': typeof ConfiguracoesApiVagasRoute
+  '/configuracoes/editor-v4': typeof ConfiguracoesEditorV4Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api-vagas': typeof ApiVagasRoute
+  '/vagas': typeof VagasRoute
+  '/configuracoes/api-vagas': typeof ConfiguracoesApiVagasRoute
+  '/configuracoes/editor-v4': typeof ConfiguracoesEditorV4Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api-vagas': typeof ApiVagasRoute
+  '/vagas': typeof VagasRoute
+  '/configuracoes/api-vagas': typeof ConfiguracoesApiVagasRoute
+  '/configuracoes/editor-v4': typeof ConfiguracoesEditorV4Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/api-vagas'
+    | '/vagas'
+    | '/configuracoes/api-vagas'
+    | '/configuracoes/editor-v4'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/api-vagas'
+    | '/vagas'
+    | '/configuracoes/api-vagas'
+    | '/configuracoes/editor-v4'
+  id:
+    | '__root__'
+    | '/'
+    | '/api-vagas'
+    | '/vagas'
+    | '/configuracoes/api-vagas'
+    | '/configuracoes/editor-v4'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiVagasRoute: typeof ApiVagasRoute
+  VagasRoute: typeof VagasRoute
+  ConfiguracoesApiVagasRoute: typeof ConfiguracoesApiVagasRoute
+  ConfiguracoesEditorV4Route: typeof ConfiguracoesEditorV4Route
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +104,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api-vagas': {
+      id: '/api-vagas'
+      path: '/api-vagas'
+      fullPath: '/api-vagas'
+      preLoaderRoute: typeof ApiVagasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vagas': {
+      id: '/vagas'
+      path: '/vagas'
+      fullPath: '/vagas'
+      preLoaderRoute: typeof VagasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracoes/api-vagas': {
+      id: '/configuracoes/api-vagas'
+      path: '/configuracoes/api-vagas'
+      fullPath: '/configuracoes/api-vagas'
+      preLoaderRoute: typeof ConfiguracoesApiVagasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracoes/editor-v4': {
+      id: '/configuracoes/editor-v4'
+      path: '/configuracoes/editor-v4'
+      fullPath: '/configuracoes/editor-v4'
+      preLoaderRoute: typeof ConfiguracoesEditorV4RouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiVagasRoute: ApiVagasRoute,
+  VagasRoute: VagasRoute,
+  ConfiguracoesApiVagasRoute: ConfiguracoesApiVagasRoute,
+  ConfiguracoesEditorV4Route: ConfiguracoesEditorV4Route,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
