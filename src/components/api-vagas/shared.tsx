@@ -1,6 +1,7 @@
 import { Accessibility, Star } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import { COR, type Vaga } from "./data";
+import logoNovaLima from "./logo-nova-lima.png";
 
 export type ModeloProps = {
   vagas: Vaga[];
@@ -40,13 +41,11 @@ export function MarcaDestaque({ className = "" }: { className?: string }) {
   );
 }
 
+// Logo da Prefeitura de Nova Lima. A imagem tem fundo branco e letras escuras, então em fundo escuro
+// (dark = false) ela vai dentro de uma caixa branca para continuar legível.
 export function Logo({ dark = false }: { dark?: boolean }) {
-  return (
-    <span className={`flex items-center gap-2 font-bold ${dark ? "text-slate-900" : "text-white"}`}>
-      <span className="grid h-9 w-9 place-items-center rounded-full text-sm text-white" style={{ backgroundColor: COR.fundo }}>GH</span>
-      <span className="text-lg leading-none">Grupo<br /><span className="text-xs font-medium tracking-[0.2em]">HORIZONTE</span></span>
-    </span>
-  );
+  const img = <img src={logoNovaLima} alt="Prefeitura de Nova Lima — O futuro mora aqui" className="h-12 w-auto sm:h-14" />;
+  return dark ? img : <span className="inline-flex rounded-md bg-white px-2 py-1">{img}</span>;
 }
 
 export function FontWrap({ font, children, className = "" }: { font: string; children: ReactNode; className?: string }) {

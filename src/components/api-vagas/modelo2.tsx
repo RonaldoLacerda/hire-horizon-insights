@@ -26,7 +26,7 @@ export function Modelo2({ vagas, destaques, destaqueIds }: ModeloProps) {
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative mx-auto w-full max-w-6xl px-4">
           <h1 className="text-[2rem] font-bold text-white md:text-[4rem] md:font-light">{EMPRESA.titulo}</h1>
-          <p className="mb-8 text-white/70">{EMPRESA.descricao}</p>
+          <p className="mb-8 text-white">{EMPRESA.descricao}</p>
           <form className="grid gap-2 md:grid-cols-12" onSubmit={(e) => e.preventDefault()}>
             <div className="grid gap-2 md:col-span-10 md:grid-cols-12">
               <input className={`${field} md:col-span-6`} placeholder="Título da Vaga, Empresa ou Palavra-Chave" />

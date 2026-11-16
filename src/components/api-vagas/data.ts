@@ -24,9 +24,10 @@ export type Vaga = {
 };
 
 export const EMPRESA = {
-  nome: "Grupo Horizonte",
-  titulo: "Venha crescer com a gente",
-  descricao: "Conheça as oportunidades abertas e faça parte de uma empresa que acredita em pessoas.",
+  // Prefeitura de Nova Lima: título e frase do topo como no site atual deles.
+  nome: "Prefeitura de Nova Lima",
+  titulo: "Banco de Talentos",
+  descricao: "Para trabalhadores que buscam oportunidades de emprego e empresas que buscam contratar profissionais.",
   email: "talentos@grupohorizonte.com.br",
   telefone: "(41) 3000-0000",
   endereco: "Rua das Flores, 1000 – Centro, Curitiba/PR",
