@@ -2,7 +2,7 @@
 // lista em linhas sem caixa, faixa de chamada colorida e rodapé escuro.
 import { ArrowRight, Facebook, Instagram, Linkedin, MapPin } from "lucide-react";
 import { COR, EMPRESA, local, salario } from "./data";
-import { FontWrap, Logo, MarcaDestaque, Pcd, SeloDestaque, heroBg, styleApi, type ModeloProps } from "./shared";
+import { ContatoRodape, FontWrap, Logo, MarcaDestaque, Pcd, SeloDestaque, heroBg, styleApi, type ModeloProps } from "./shared";
 
 const input = "h-[50px] w-full rounded-[.3rem] border-0 bg-white px-3 text-sm text-[#495057]";
 
@@ -93,10 +93,10 @@ export function Modelo1({ vagas, destaques, destaqueIds }: ModeloProps) {
 // Rodapé dos modelos 1 e 3 (mesma lógica no RHBot).
 export function Rodape13({ circulos = true }: { circulos?: boolean }) {
   return (
-    <footer className="py-12 text-[#7f848c]" style={{ backgroundColor: COR.rodape }}>
+    <footer className="py-12 text-white/70" style={{ backgroundColor: COR.rodape }}>
       <div className="mx-auto grid max-w-5xl gap-8 px-4 text-sm md:grid-cols-3">
         <div><h3 className="mb-4 text-lg text-white">Mapa do Site</h3><p>Vagas</p><p>Sobre</p><p>Candidato</p></div>
-        <div><h3 className="mb-4 text-lg text-white">Entre em Contato</h3><p>{EMPRESA.endereco}</p><p>{EMPRESA.telefone}</p><p>{EMPRESA.email}</p></div>
+        <div><h3 className="mb-4 text-lg text-white">Entre em Contato</h3><ContatoRodape /></div>
         <div>
           <h3 className="mb-4 text-lg text-white">Redes Sociais</h3>
           <div className={circulos ? "flex gap-2" : "space-y-1"}>

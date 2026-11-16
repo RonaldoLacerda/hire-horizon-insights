@@ -1,6 +1,6 @@
 import { Accessibility, Star } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import { COR, type Vaga } from "./data";
+import { COR, EMPRESA, type Vaga } from "./data";
 import logoNovaLima from "./logo-nova-lima.png";
 
 export type ModeloProps = {
@@ -15,9 +15,22 @@ export const styleApi: CSSProperties = { backgroundColor: COR.fundo, color: COR.
 // Fundo de imagem do topo (img_topo). Gradiente no lugar da foto da empresa.
 export const heroBg: CSSProperties = {
   backgroundImage:
-    "linear-gradient(135deg, rgba(14,116,144,.85), rgba(15,23,42,.9)), radial-gradient(circle at 20% 30%, rgba(255,255,255,.18), transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,.12), transparent 45%)",
-  backgroundColor: "#1e293b",
+    "linear-gradient(135deg, rgba(5,48,98,.85), rgba(3,20,45,.92)), radial-gradient(circle at 20% 30%, rgba(255,255,255,.18), transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,.12), transparent 45%)",
+  backgroundColor: "#031f40",
 };
+
+// Coluna "Entre em Contato" dos modelos 1 e 2, como em vagas/API_1 e API_2/rodape.blade.php:
+// Endereço (endereço + cidade e estado), Telefone(s) e Email(s), cada um com seu rótulo.
+export function ContatoRodape() {
+  const rotulo = "block text-white";
+  return (
+    <ul className="space-y-3">
+      <li><span className={rotulo}>Endereço</span>{EMPRESA.endereco}<br />{EMPRESA.cidade} {EMPRESA.estado}</li>
+      <li><span className={rotulo}>Telefone{EMPRESA.telefones.length > 1 ? "s" : ""}</span>{EMPRESA.telefones.map((t) => <span key={t} className="block">{t}</span>)}</li>
+      <li><span className={rotulo}>Email{EMPRESA.emails.length > 1 ? "s" : ""}</span>{EMPRESA.emails.map((e) => <span key={e} className="block">{e}</span>)}</li>
+    </ul>
+  );
+}
 
 export function Pcd() {
   return <Accessibility aria-label="Elegível para PCD" className="ml-1.5 inline h-[0.9em] w-[0.9em] align-[-0.1em]" />;

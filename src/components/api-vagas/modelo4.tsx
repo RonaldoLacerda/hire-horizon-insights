@@ -162,11 +162,11 @@ export function Modelo4({ vagas, destaques, destaqueIds, v4 = ESTADO_PADRAO.v4 }
           return <Secao key={s} vagas={vagas} destaques={destaques} destaqueIds={destaqueIds} cfg={v4} fundo={fundo} />;
         })}
 
-        <footer className="bg-[#212529] py-16 text-sm text-white/70">
+        <footer className="py-16 text-sm text-white/70" style={{ backgroundColor: COR.rodape }}>
           <div className="mx-auto grid max-w-[1280px] gap-8 px-4 md:grid-cols-3">
             <div><Logo /><p className="mt-3">{EMPRESA.descricao}</p></div>
-            <div><h4 className="mb-3 font-semibold text-white">Endereço</h4><p className="flex gap-2"><MapPin className="h-4 w-4 shrink-0" />{EMPRESA.endereco}</p></div>
-            <div><h4 className="mb-3 font-semibold text-white">Contato</h4><p className="flex gap-2"><Mail className="h-4 w-4" />{EMPRESA.email}</p><p className="mt-1 flex gap-2"><Phone className="h-4 w-4" />{EMPRESA.telefone}</p></div>
+            <div><h4 className="mb-3 font-semibold text-white">Endereço</h4><p className="flex gap-2"><MapPin className="mt-0.5 h-4 w-4 shrink-0" />{EMPRESA.endereco}, {EMPRESA.cidade} - {EMPRESA.estado}</p></div>
+            <div><h4 className="mb-3 font-semibold text-white">Contato</h4><p className="flex gap-2"><Mail className="mt-0.5 h-4 w-4 shrink-0" /><span>{EMPRESA.emails.map((e) => <span key={e} className="block">{e}</span>)}</span></p><p className="mt-1 flex gap-2"><Phone className="mt-0.5 h-4 w-4 shrink-0" /><span>{EMPRESA.telefones.map((t) => <span key={t} className="block">{t}</span>)}</span></p></div>
           </div>
           <p className="mx-auto mt-10 max-w-[1280px] border-t border-white/20 px-4 pt-6 text-center">RHbot by Menvie</p>
         </footer>

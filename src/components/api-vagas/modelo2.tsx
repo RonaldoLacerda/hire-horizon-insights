@@ -2,7 +2,7 @@
 // esquerda, lista em caixa com faixa azul de 3px à esquerda e contrato em contorno à direita.
 import { Briefcase, DollarSign, Facebook, Hash, Instagram, Linkedin, MapPin, Plus } from "lucide-react";
 import { COR, EMPRESA, local, salario } from "./data";
-import { FontWrap, Logo, MarcaDestaque, Pcd, SeloDestaque, heroBg, styleApi, type ModeloProps } from "./shared";
+import { ContatoRodape, FontWrap, Logo, MarcaDestaque, Pcd, SeloDestaque, heroBg, styleApi, type ModeloProps } from "./shared";
 
 const field = "h-[55px] w-full border-0 bg-white px-6 text-sm text-[#495057]";
 
@@ -96,11 +96,11 @@ export function Modelo2({ vagas, destaques, destaqueIds }: ModeloProps) {
         </div>
       </section>
 
-      <footer className="py-12 text-[#7f848c]" style={{ backgroundColor: COR.rodape }}>
+      <footer className="py-12 text-white/70" style={{ backgroundColor: COR.rodape }}>
         <div className="mx-auto grid max-w-6xl gap-8 px-4 text-sm md:grid-cols-4">
           <div><h3 className="mb-4 text-xl text-white">Sobre</h3><p className="mb-4">Somos uma empresa que acredita em pessoas.</p><button className="rounded-[30px] px-5 py-2 text-white" style={{ backgroundColor: "#28a745" }}>Veja Mais</button></div>
           <div><h3 className="mb-4 text-xl text-white">Mapa do Site</h3><p>Vagas</p><p>Sobre</p><p>Candidato</p></div>
-          <div><h3 className="mb-4 text-xl text-white">Entre em Contato</h3><p>{EMPRESA.endereco}</p><p>{EMPRESA.telefone}</p><p>{EMPRESA.email}</p></div>
+          <div><h3 className="mb-4 text-xl text-white">Entre em Contato</h3><ContatoRodape /></div>
           <div><h3 className="mb-4 text-xl text-white">Redes Sociais</h3>
             {[{ i: Facebook, n: "Facebook" }, { i: Instagram, n: "Instagram" }, { i: Linkedin, n: "LinkedIn" }].map(({ i: I, n }) => <p key={n} className="flex items-center gap-2"><I className="h-4 w-4" />{n}</p>)}
           </div>

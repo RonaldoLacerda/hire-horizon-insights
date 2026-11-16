@@ -24,17 +24,21 @@ export type Vaga = {
 };
 
 export const EMPRESA = {
-  // Prefeitura de Nova Lima: título e frase do topo como no site atual deles.
+  // Prefeitura de Nova Lima: título, frase e contatos como no site atual deles.
   nome: "Prefeitura de Nova Lima",
   titulo: "Banco de Talentos",
   descricao: "Para trabalhadores que buscam oportunidades de emprego e empresas que buscam contratar profissionais.",
-  email: "talentos@grupohorizonte.com.br",
-  telefone: "(41) 3000-0000",
-  endereco: "Rua das Flores, 1000 – Centro, Curitiba/PR",
+  // Mesmos campos do cadastro da empresa no RHBot: um endereço + cidade/estado, até 3 telefones e até 3 e-mails.
+  endereco: "Rua Marquês de Sapucaí, s/n – Centro",
+  cidade: "Nova Lima",
+  estado: "MG",
+  telefones: ["(31) 3180-5891", "(31) 3180-5720"],
+  emails: ["vagascap@pnl.mg.gov.br"],
 };
 
 // Cores configuráveis no RHBot (rs_api_config.cor_fundo / cor_fonte e --cor-empresa do modelo 4).
-export const COR = { fundo: "#0e7490", fonte: "#ffffff", tituloVagaModelo1: "#1644ba", rodape: "#242424" };
+// Azul da Prefeitura de Nova Lima (botões do site deles); o rodapé usa um tom mais escuro do mesmo azul.
+export const COR = { fundo: "#053062", fonte: "#ffffff", tituloVagaModelo1: "#053062", rodape: "#031f40" };
 
 const base = { candidatos: 0, contratados: [0, 1] as [number, number] };
 
